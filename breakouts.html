@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breakout Sessions · Agentic AI Workshop 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #0f1a12;
+      --ink-mid:   #3a4a3e;
+      --ink-light: #6b7d6f;
+      --cream:     #f5f2eb;
+      --cream-dark:#ede8dc;
+      --moss:      #2d5a3d;
+      --moss-mid:  #3e7a54;
+      --moss-light:#e8f0ea;
+      --gold:      #c8972a;
+      --gold-light:#f5e8c8;
+      --white:     #ffffff;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+      --r: 6px;
+
+      /* per-group accent colours */
+      --c1: #2d5a3d; --c1-l: #e8f0ea;  /* moss – Group A */
+      --c2: #1a4a7a; --c2-l: #e6f1fb;  /* blue – Group B */
+      --c3: #7a3a1a; --c3-l: #faeeda;  /* amber – Group C */
+      --c4: #5a2d82; --c4-l: #f0eafb;  /* purple – Group D */
+      --c5: #2e7d32; --c5-l: #e8f5e9;  /* green – Group E */
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--moss);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+    .nav-brand { font-family: var(--serif); color: var(--white); font-size: 1.05rem; letter-spacing: .02em; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,.82); text-decoration: none; font-size: .88rem; font-weight: 500; letter-spacing:.04em; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--gold); color: var(--ink) !important; padding: 6px 16px; border-radius: 20px; font-weight: 600 !important; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--moss); padding: 56px 2rem 48px; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 90% 20%, rgba(200,151,42,.1), transparent);
+      pointer-events: none;
+    }
+    .page-header-inner { max-width: 860px; margin: 0 auto; position: relative; }
+    .page-label {
+      display: inline-block; background: var(--gold-light); color: var(--gold);
+      font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+      padding: 4px 14px; border-radius: 20px; margin-bottom: 16px;
+    }
+    .page-header h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.9rem); color: var(--white); line-height: 1.15; margin-bottom: 14px; }
+    .page-header p { color: rgba(255,255,255,.75); font-size: 1.05rem; max-width: 580px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: rgba(255,255,255,.6); text-decoration: none; font-size: .86rem; margin-bottom: 20px; transition: color .2s; }
+    .back-link:hover { color: var(--white); }
+
+    /* ── CONTENT ── */
+    section { padding: 64px 2rem; }
+    section:nth-child(even) { background: var(--white); }
+    .inner { max-width: 860px; margin: 0 auto; }
+    .section-label { font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--moss-mid); margin-bottom: 10px; }
+    .section-title { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--ink); margin-bottom: 14px; line-height: 1.2; }
+    .section-lead { color: var(--ink-mid); font-size: 1rem; max-width: 660px; margin-bottom: 36px; }
+
+    /* ── LDJ EXPLAINER ── */
+    .ldj-steps { display: flex; flex-direction: column; gap: 0; counter-reset: step; }
+    .ldj-step {
+      display: grid; grid-template-columns: 48px 1fr;
+      gap: 0 16px; padding: 20px 0;
+      border-bottom: 1px solid var(--cream-dark);
+      align-items: start;
+    }
+    .ldj-step:first-child { border-top: 1px solid var(--cream-dark); }
+    .ldj-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--moss); color: var(--white);
+      font-family: var(--serif); font-size: 1.05rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .ldj-step-title { font-weight: 600; font-size: .98rem; color: var(--ink); margin-bottom: 3px; }
+    .ldj-step-body { font-size: .9rem; color: var(--ink-light); line-height: 1.55; }
+    .ldj-time { display: inline-block; font-size: .78rem; font-weight: 600; background: var(--gold-light); color: var(--gold); padding: 2px 9px; border-radius: 20px; margin-left: 8px; vertical-align: middle; }
+
+    /* ── BREAKOUT CARDS ── */
+    .breakout-section { margin-bottom: 48px; }
+    .breakout-card {
+      background: var(--white); border-radius: 10px;
+      border: 1px solid var(--cream-dark);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .bc-header {
+      padding: 22px 24px 18px;
+      border-left: 5px solid;
+      display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .bc-title-wrap {}
+    .bc-group { font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; opacity: .7; }
+    .bc-title { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); line-height: 1.2; }
+    .bc-badge { font-size: .8rem; font-weight: 500; padding: 4px 12px; border-radius: 20px; align-self: flex-start; white-space: nowrap; }
+    .bc-body { padding: 20px 24px 24px; }
+    .bc-challenge {
+      background: var(--cream); border-radius: var(--r);
+      padding: 14px 18px; margin-bottom: 18px;
+      font-size: .92rem; color: var(--ink-mid);
+    }
+    .bc-challenge strong { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-light); margin-bottom: 4px; }
+    .bc-subthemes { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+    .bc-pill {
+      font-size: .8rem; padding: 4px 12px; border-radius: 20px;
+      border: 1px solid; font-weight: 500;
+    }
+    .bc-participants { font-size: .88rem; color: var(--ink-light); line-height: 1.6; }
+    .bc-participants strong { color: var(--ink); }
+
+    /* Group colour helpers */
+    .g1 { border-color: var(--c1); } .g1 .bc-group { color: var(--c1); } .g1 .bc-badge { background: var(--c1-l); color: var(--c1); }
+    .g1 .bc-pill { border-color: var(--c1); color: var(--c1); background: var(--c1-l); }
+    .g2 { border-color: var(--c2); } .g2 .bc-group { color: var(--c2); } .g2 .bc-badge { background: var(--c2-l); color: var(--c2); }
+    .g2 .bc-pill { border-color: var(--c2); color: var(--c2); background: var(--c2-l); }
+    .g3 { border-color: var(--c3); } .g3 .bc-group { color: var(--c3); } .g3 .bc-badge { background: var(--c3-l); color: var(--c3); }
+    .g3 .bc-pill { border-color: var(--c3); color: var(--c3); background: var(--c3-l); }
+    .g4 { border-color: var(--c4); } .g4 .bc-group { color: var(--c4); } .g4 .bc-badge { background: var(--c4-l); color: var(--c4); }
+    .g4 .bc-pill { border-color: var(--c4); color: var(--c4); background: var(--c4-l); }
+    .g5 { border-color: var(--c5); } .g5 .bc-group { color: var(--c5); } .g5 .bc-badge { background: var(--c5-l); color: var(--c5); }
+    .g5 .bc-pill { border-color: var(--c5); color: var(--c5); background: var(--c5-l); }
+
+    /* ── TOOLS ── */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-top: 8px; }
+    .tool-card {
+      background: var(--cream); border: 1px solid var(--cream-dark);
+      border-radius: var(--r); padding: 18px 18px 16px;
+    }
+    .tool-icon { font-size: 1.5rem; margin-bottom: 8px; }
+    .tool-name { font-weight: 600; font-size: .95rem; color: var(--ink); margin-bottom: 4px; }
+    .tool-desc { font-size: .84rem; color: var(--ink-light); line-height: 1.5; }
+    .tool-tag { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; margin-top: 8px; background: var(--moss-light); color: var(--moss); }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; gap: 0; }
+    .tl-item { flex: 1; text-align: center; position: relative; }
+    .tl-item:not(:last-child)::after {
+      content: ''; position: absolute;
+      top: 14px; left: 50%; width: 100%; height: 2px;
+      background: var(--cream-dark);
+    }
+    .tl-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--moss); margin: 0 auto 10px; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+    .tl-dot span { color: var(--white); font-size: .72rem; font-weight: 700; }
+    .tl-min { font-size: .72rem; font-weight: 600; color: var(--gold); margin-bottom: 3px; letter-spacing: .04em; }
+    .tl-label { font-size: .78rem; color: var(--ink-mid); line-height: 1.35; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,.5);
+      padding: 32px 2rem; text-align: center; font-size: .84rem;
+    }
+    footer a { color: rgba(255,255,255,.65); text-decoration: none; }
+    footer .footer-logos { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; flex-wrap: wrap; }
+    footer .footer-logo-text { font-family: var(--serif); font-size: 1.1rem; color: rgba(255,255,255,.7); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      section { padding: 44px 1.2rem; }
+      .timeline { flex-direction: column; gap: 12px; }
+      .tl-item::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-brand">Agentic AI · 2026</span>
+  <ul class="nav-links">
+    <li><a href="index.html">About</a></li>
+    <li><a href="index.html#agenda">Agenda</a></li>
+    <li><a href="index.html#speakers">Speakers</a></li>
+    <li><a href="breakouts.html">Breakout Sessions</a></li>
+    <li><a href="index.html#register" class="nav-cta">Register</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <a href="index.html" class="back-link">
+      ← Back to main page
+    </a>
+    <span class="page-label">Interactive Sessions</span>
+    <h1>Breakout Sessions</h1>
+    <p>45 minutes of focused group work, followed by a collective synthesis. All groups use the same Lightning Decision Jam method — only the challenge question changes.</p>
+  </div>
+</div>
+
+<!-- LDJ METHOD -->
+<section id="method">
+  <div class="inner">
+    <p class="section-label">The Method</p>
+    <h2 class="section-title">Lightning Decision Jam</h2>
+    <p class="section-lead">
+      All breakout groups follow the same structured format: the <strong>Lightning Decision Jam (LDJ)</strong>. Developed by AJ&amp;Smart and used by teams at Google, Airbnb, and the UN, LDJ is a rapid, democratic method that takes a group from open-ended problems to a prioritised action list in under an hour — no endless debate, no dominant voices.
+    </p>
+
+    <!-- Timeline -->
+    <div class="timeline" style="margin-bottom: 40px;">
+      <div class="tl-item">
+        <div class="tl-dot"><span>1</span></div>
+        <div class="tl-min">5 min</div>
+        <div class="tl-label">Individual problem writing</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>2</span></div>
+        <div class="tl-min">5 min</div>
+        <div class="tl-label">Share & present notes</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>3</span></div>
+        <div class="tl-min">5 min</div>
+        <div class="tl-label">Dot vote on top problems</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>4</span></div>
+        <div class="tl-min">5 min</div>
+        <div class="tl-label">Reframe as "How Might We"</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>5</span></div>
+        <div class="tl-min">10 min</div>
+        <div class="tl-label">Generate solutions (silent)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>6</span></div>
+        <div class="tl-min">10 min</div>
+        <div class="tl-label">Vote on solutions</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"><span>7</span></div>
+        <div class="tl-min">5 min</div>
+        <div class="tl-label">Define priority actions</div>
+      </div>
+    </div>
+
+    <div class="ldj-steps">
+      <div class="ldj-step">
+        <div class="ldj-num">1</div>
+        <div>
+          <div class="ldj-step-title">Individual Problem Writing <span class="ldj-time">5 min</span></div>
+          <div class="ldj-step-body">Everyone writes problems or challenges on sticky notes — one idea per note, silently and independently. This prevents anchoring bias and ensures every voice contributes before discussion begins.</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">2</div>
+        <div>
+          <div class="ldj-step-title">Share &amp; Present <span class="ldj-time">5 min</span></div>
+          <div class="ldj-step-body">Each person briefly presents their notes (30 sec each). No discussion or rebuttals yet — just sharing. Facilitator groups similar ideas together on the Miro board.</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">3</div>
+        <div>
+          <div class="ldj-step-title">Dot Vote on Problems <span class="ldj-time">5 min</span></div>
+          <div class="ldj-step-body">Each participant gets 5 dots to distribute across the problems they find most important. Dots can be stacked on one note or spread out. The top-voted problems move forward.</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">4</div>
+        <div>
+          <div class="ldj-step-title">Reframe as "How Might We…?" <span class="ldj-time">5 min</span></div>
+          <div class="ldj-step-body">The facilitator reframes the top problem as a "How Might We" question. This simple reframe turns a complaint into an opportunity and opens up the solution space without prescribing an answer. Example: "We can't trust LLM outputs" → "How might we verify and audit LLM decisions in a research workflow?"</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">5</div>
+        <div>
+          <div class="ldj-step-title">Generate Solutions — Silently <span class="ldj-time">10 min</span></div>
+          <div class="ldj-step-body">Participants write solutions to the HMW question, again independently and silently. You can use Claude or ChatGPT here to brainstorm — paste the HMW question into the AI and add its suggestions to your own notes.</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">6</div>
+        <div>
+          <div class="ldj-step-title">Vote on Solutions <span class="ldj-time">10 min</span></div>
+          <div class="ldj-step-body">Solutions are presented and dot-voted again. The top-voted solutions surface the group's collective priorities without lengthy debate.</div>
+        </div>
+      </div>
+      <div class="ldj-step">
+        <div class="ldj-num">7</div>
+        <div>
+          <div class="ldj-step-title">Define Priority Actions <span class="ldj-time">5 min</span></div>
+          <div class="ldj-step-body">The group turns the winning solution(s) into 1–2 concrete, actionable next steps. These become the group's contribution to the plenary synthesis and to the research agenda for the August 2026 workshop.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BREAKOUT GROUPS -->
+<section id="groups">
+  <div class="inner">
+    <p class="section-label">Parallel Groups · 14:30–15:15</p>
+    <h2 class="section-title">The Five Breakout Groups</h2>
+    <p class="section-lead">
+      Groups are pre-assigned based on participants' stated interests and expertise. Each group receives the same LDJ canvas in Miro with a different opening challenge question tailored to their theme.
+    </p>
+
+    <!-- GROUP A -->
+    <div class="breakout-card g1">
+      <div class="bc-header g1">
+        <div class="bc-title-wrap">
+          <div class="bc-group">Group A</div>
+          <div class="bc-title">Building &amp; Governing Agentic Systems</div>
+        </div>
+        <span class="bc-badge g1">Technical · Architecture</span>
+      </div>
+      <div class="bc-body">
+        <div class="bc-challenge">
+          <strong>Opening Challenge</strong>
+          "What makes agentic AI systems fail or go wrong in practice — and who is accountable when they do?"
+        </div>
+        <div class="bc-subthemes">
+          <span class="bc-pill g1">Multi-agent systems</span>
+          <span class="bc-pill g1">Runtime governance</span>
+          <span class="bc-pill g1">Systems engineering</span>
+          <span class="bc-pill g1">Software reliability</span>
+          <span class="bc-pill g1">Agentic pipelines</span>
+        </div>
+        <div class="bc-participants"><strong>Participants drawn from:</strong> Software engineering, cloud architecture, AI systems, data science, agentic workflow design, and runtime compliance backgrounds.</div>
+      </div>
+    </div>
+
+    <!-- GROUP B -->
+    <div class="breakout-card g2">
+      <div class="bc-header g2">
+        <div class="bc-title-wrap">
+          <div class="bc-group">Group B</div>
+          <div class="bc-title">AI in Research &amp; Academic Workflows</div>
+        </div>
+        <span class="bc-badge g2">Research Methods · Academia</span>
+      </div>
+      <div class="bc-body">
+        <div class="bc-challenge">
+          <strong>Opening Challenge</strong>
+          "What stops researchers from trusting or adopting AI in their workflow — and what would need to change?"
+        </div>
+        <div class="bc-subthemes">
+          <span class="bc-pill g2">LLM usage in research</span>
+          <span class="bc-pill g2">Academic writing</span>
+          <span class="bc-pill g2">Literature review</span>
+          <span class="bc-pill g2">Data analysis</span>
+          <span class="bc-pill g2">AI for policy advice</span>
+          <span class="bc-pill g2">FAIR principles</span>
+        </div>
+        <div class="bc-participants"><strong>Participants drawn from:</strong> HCI, environmental governance, food systems policy, soil science, marine biology, data science, operations, and programme management backgrounds.</div>
+      </div>
+    </div>
+
+    <!-- GROUP C -->
+    <div class="breakout-card g3">
+      <div class="bc-header g3">
+        <div class="bc-title-wrap">
+          <div class="bc-group">Group C</div>
+          <div class="bc-title">Domain Applications: Agri-Food, Horticulture &amp; Bioinformatics</div>
+        </div>
+        <span class="bc-badge g3">Applied · Life Sciences</span>
+      </div>
+      <div class="bc-body">
+        <div class="bc-challenge">
+          <strong>Opening Challenge</strong>
+          "What would a genuinely useful AI agent look like in your domain — what data does it need, what does it decide, and when should it hand back to a human?"
+        </div>
+        <div class="bc-subthemes">
+          <span class="bc-pill g3">Greenhouse horticulture</span>
+          <span class="bc-pill g3">Digital agriculture</span>
+          <span class="bc-pill g3">Decision support systems</span>
+          <span class="bc-pill g3">Bioinformatics / genomics</span>
+          <span class="bc-pill g3">Mechanistic modelling</span>
+          <span class="bc-pill g3">Autonomous research teams</span>
+        </div>
+        <div class="bc-participants"><strong>Participants drawn from:</strong> Horticulture, plant biology, bioinformatics, genomics, IoT/agriculture, forest ecology, and ML for sensors backgrounds.</div>
+      </div>
+    </div>
+
+    <!-- GROUP D -->
+    <div class="breakout-card g4">
+      <div class="bc-header g4">
+        <div class="bc-title-wrap">
+          <div class="bc-group">Group D</div>
+          <div class="bc-title">Ethics, Sustainability &amp; Responsible AI</div>
+        </div>
+        <span class="bc-badge g4">Cross-cutting · Governance</span>
+      </div>
+      <div class="bc-body">
+        <div class="bc-challenge">
+          <strong>Opening Challenge</strong>
+          "What are the non-negotiable guardrails for using agentic AI responsibly — and how do we measure whether we are actually meeting them?"
+        </div>
+        <div class="bc-subthemes">
+          <span class="bc-pill g4">Environmental impact</span>
+          <span class="bc-pill g4">Green AI</span>
+          <span class="bc-pill g4">Security &amp; privacy</span>
+          <span class="bc-pill g4">AI ethics</span>
+          <span class="bc-pill g4">Sustainable food behaviours</span>
+          <span class="bc-pill g4">Foundation models</span>
+          <span class="bc-pill g4">Federated learning</span>
+        </div>
+        <div class="bc-participants"><strong>Participants drawn from:</strong> Cybersecurity economics, ubiquitous computing, Edge AI, psychology/mental health, sustainability/life cycle analysis, and water governance backgrounds.</div>
+      </div>
+    </div>
+
+    <!-- GROUP E -->
+    <div class="breakout-card g5">
+      <div class="bc-header g5">
+        <div class="bc-title-wrap">
+          <div class="bc-group">Group E</div>
+          <div class="bc-title">Human–AI Collaboration &amp; Wellbeing</div>
+        </div>
+        <span class="bc-badge g5">HCI · Wellbeing</span>
+      </div>
+      <div class="bc-body">
+        <div class="bc-challenge">
+          <strong>Opening Challenge</strong>
+          "Where does human–AI collaboration genuinely outperform either alone — and what does it take for that collaboration to feel trustworthy and sustainable?"
+        </div>
+        <div class="bc-subthemes">
+          <span class="bc-pill g5">Human-AI interaction</span>
+          <span class="bc-pill g5">Conversational agents</span>
+          <span class="bc-pill g5">AI for mental health</span>
+          <span class="bc-pill g5">Wellbeing &amp; reflection</span>
+          <span class="bc-pill g5">ADHD assistance</span>
+          <span class="bc-pill g5">Agent vs human performance</span>
+        </div>
+        <div class="bc-participants"><strong>Participants drawn from:</strong> HCI, accessibility, human-AI communication, conversational AI, wellbeing technology, and streaming/graph AI backgrounds.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="inner">
+    <p class="section-label">Tools &amp; Platforms</p>
+    <h2 class="section-title">What You'll Use</h2>
+    <p class="section-lead">Each breakout room comes pre-equipped. You do not need to install anything — all tools run in the browser.</p>
+
+    <div class="tools-grid">
+
+      <div class="tool-card">
+        <div class="tool-icon">📹</div>
+        <div class="tool-name">Zoom</div>
+        <div class="tool-desc">Main platform for the full workshop and for splitting into parallel breakout rooms. The facilitator can broadcast to all rooms simultaneously.</div>
+        <span class="tool-tag">Communication</span>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">🗂</div>
+        <div class="tool-name">Miro</div>
+        <div class="tool-desc">Each group has its own pre-loaded LDJ canvas in Miro with sticky note zones, a dot-voting area, and a "How Might We" reframe section. Free to join as a guest.</div>
+        <span class="tool-tag">Collaboration</span>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">✨</div>
+        <div class="tool-name">Miro AI</div>
+        <div class="tool-desc">Miro's built-in AI features can cluster sticky notes, generate summaries of the board, and suggest related ideas — useful for the synthesis step at the end of LDJ.</div>
+        <span class="tool-tag">AI · Built-in</span>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">🤖</div>
+        <div class="tool-name">Claude / ChatGPT</div>
+        <div class="tool-desc">Use during the silent solution-generation step (Step 5) to brainstorm additional ideas. Paste your "How Might We" question in and add the AI's suggestions to the board alongside your own.</div>
+        <span class="tool-tag">AI · Brainstorming</span>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">📚</div>
+        <div class="tool-name">Elicit</div>
+        <div class="tool-desc">An AI research assistant that can find and summarise relevant papers. Useful for Groups B and C to quickly check whether a proposed solution has been studied before.</div>
+        <span class="tool-tag">AI · Research</span>
+      </div>
+
+      <div class="tool-card">
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Mentimeter / Slido</div>
+        <div class="tool-desc">Used for the opening live poll and for the plenary Dotmocracy vote during the report-back. Results shown live on screen. No account needed to vote.</div>
+        <span class="tool-tag">Polling</span>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 32px; background: var(--gold-light); border-radius: var(--r); padding: 20px 22px; border-left: 4px solid var(--gold);">
+      <strong style="display: block; font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; color: var(--gold); margin-bottom: 6px;">Using AI tools during the session</strong>
+      <p style="font-size: .92rem; color: var(--ink-mid); line-height: 1.6;">
+        You are encouraged to use Claude, ChatGPT, or Elicit during the breakout — especially during Step 5 (silent solution generation). The goal is not to outsource thinking to the AI, but to use it as a sparring partner: give it your "How Might We" question, see what it suggests, critically evaluate those suggestions, and add the ones you find genuinely useful to the board. This mirrors how agentic AI works in practice — the human stays in the loop.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logos">
+    <span class="footer-logo-text">WUR · Information Technology Group</span>
+    <span class="footer-logo-text">4TU.NIRICT</span>
+  </div>
+  <p>Workshop on Agentic AI for Life Sciences · 1 July 2026 · Online<br>
+  Contact: <a href="mailto:tahir.abbas@wur.nl">tahir.abbas@wur.nl</a></p>
+</footer>
+
+</body>
+</html>
