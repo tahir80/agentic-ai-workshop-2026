@@ -290,7 +290,8 @@
     <p class="section-lead">A carefully balanced mix of expert talks and hands-on interactive sessions, designed so that the majority of time is spent doing, not just listening.</p>
     <div class="agenda-list">
       <div class="agenda-item"><div class="agenda-time">13:00</div><div class="agenda-body"><div class="agenda-title">Welcome &amp; Live Pulse Poll <span class="agenda-tag tag-active">Interactive</span></div><div class="agenda-desc">Organisers open the session. A live Mentimeter/Slido poll gives an immediate snapshot of the room's AI experience — results shared instantly to set the stage.</div></div></div>
-      <div class="agenda-item"><div class="agenda-time">13:15</div><div class="agenda-body"><div class="agenda-title">Talk 1 — Systems Thinking &amp; Agentic AI Architecture <span class="agenda-tag tag-talk">Talk</span></div><div class="agenda-desc">Bedir Tekinerdogan (WUR) · How systems engineering principles apply to designing reliable agentic pipelines.</div></div></div>
+      <div class="agenda-item"><div class="agenda-time">13:15</div><div class="agenda-body"><div class="agenda-title">Talk 1 — From Complex Adaptive Systems to Agentic AI: A Systems Thinking Perspective
+ <span class="agenda-tag tag-talk">Talk</span></div><div class="agenda-desc">Bedir Tekinerdogan (WUR) · How systems engineering principles apply to designing reliable agentic pipelines.</div></div></div>
       <div class="agenda-item"><div class="agenda-time">13:30</div><div class="agenda-body"><div class="agenda-title">Talk 2 — Runtime Governance of AI Agents <span class="agenda-tag tag-talk">Talk</span></div><div class="agenda-desc">Javed Vassilis Khan (Sappi / Wiser-Mark) · Compliance, guardrails, and audit trails for agents in production.</div></div></div>
       <div class="agenda-item"><div class="agenda-time">13:45</div><div class="agenda-body"><div class="agenda-title">Talk 3 — Agentic AI at Scale: Spotify &amp; Shell <span class="agenda-tag tag-talk">Talk</span></div><div class="agenda-desc">Mohamed Elkady (Spotify) &amp; Osama Mazhar (Shell) · Back-to-back lightning format. GenAI in cloud-scale production and industrial workflows.</div></div></div>
       <div class="agenda-item"><div class="agenda-time">14:00</div><div class="agenda-body"><div class="agenda-title">Talk 4 — Agentic AI for Agri-Food &amp; Digital Health <span class="agenda-tag tag-talk">Talk</span></div><div class="agenda-desc">Anand Gavai (EIC Accelerator Evaluator) · Real use cases across digital health and agri-food; bridging research and industry.</div></div></div>
@@ -315,7 +316,7 @@
       <div class="speaker-card" onclick="openModal('bedir')">
         <div class="speaker-img-wrap">
           <img src="images/bedir.jpg" alt="Bedir Tekinerdogan" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Bedir Tekinerdogan</div>
@@ -327,7 +328,7 @@
       <div class="speaker-card" onclick="openModal('javed')">
         <div class="speaker-img-wrap">
           <img src="images/javed.jpg" alt="Javed Vassilis Khan" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Javed Vassilis Khan</div>
@@ -339,7 +340,7 @@
       <div class="speaker-card" onclick="openModal('mohamed')">
         <div class="speaker-img-wrap">
           <img src="images/Mohamed.jpg" alt="Mohamed Elkady" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Mohamed Elkady</div>
@@ -351,7 +352,7 @@
       <div class="speaker-card" onclick="openModal('osama')">
         <div class="speaker-img-wrap">
           <img src="images/osama.jpg" alt="Osama Mazhar" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Osama Mazhar</div>
@@ -363,7 +364,7 @@
       <div class="speaker-card" onclick="openModal('anand')">
         <div class="speaker-img-wrap">
           <img src="images/anand.jpg" alt="Anand Gavai" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Anand Gavai</div>
@@ -375,7 +376,7 @@
       <div class="speaker-card" onclick="openModal('pinglin')">
         <div class="speaker-img-wrap">
           <img src="images/pinglin.jpg" alt="Pinglin Zhang" />
-          <div class="speaker-img-overlay"><span>View Bio →</span></div>
+          <div class="speaker-img-overlay"><span>View Abstract→</span></div>
         </div>
         <div class="speaker-info">
           <div class="speaker-name">Pinglin Zhang</div>
@@ -389,7 +390,7 @@
     <div class="reg-banner" id="register">
       <h3>Join the Workshop</h3>
       <p>Free to attend · Open to researchers and practitioners from academia and industry.<br>Places are limited — register early to confirm your spot.</p>
-      <a href="#">Register Here →</a>
+      <a href="https://forms.gle/DytsEQiLyCLHP2Yg9">Register Here →</a>
     </div>
   </div>
 </section>
@@ -431,11 +432,12 @@ const speakers = {
   bedir: {
     name: "Bedir Tekinerdogan",
     role: "Full Professor & Chair of Information Technology · Wageningen University & Research",
-    topic: "Systems Thinking & Architecture",
+    topic: "From Complex Adaptive Systems to Agentic AI: A Systems Thinking Perspective",
     img: "images/bedir.jpg",
     initials: "BT",
-    abstract: "This talk examines agentic AI through the lens of systems engineering. As AI agents become more autonomous — sensing their environment, planning actions, and executing multi-step tasks with minimal human oversight — classical software architecture principles are being tested in new ways. The talk will explore how concepts like modularity, fault tolerance, separation of concerns, and system-of-systems thinking apply to the design of reliable agentic pipelines. Particular attention will be given to the challenges that emerge when agents are embedded in complex socio-technical systems, and what principled design approaches can reduce the risk of emergent failures.",
-    bio: "Bedir Tekinerdogan is Full Professor and Chair of the Information Technology Group at Wageningen University & Research. His research focuses on software architecture, model-driven engineering, and AI systems design. He has published extensively on systems thinking applied to complex software-intensive systems and leads multiple research projects at the intersection of AI and life sciences.",
+    abstract: "Many real-world challenges arise in environments characterized by interconnected actors, dynamic interactions, feedback loops, adaptation, and emergence. Such environments can be understood as Complex Adaptive Systems, where system-level behavior emerges from interactions among autonomous entities and cannot be fully explained by analyzing individual components in isolation. Systems Thinking provides a valuable framework for understanding these systems by emphasizing interdependencies, resilience, and holistic reasoning. This talk explores how the concepts of Complex Adaptive Systems and Systems Thinking provide a foundation for understanding the emergence of Agentic AI. "+
+    "Unlike traditional AI systems that primarily generate predictions or recommendations, Agentic AI systems are capable of autonomous reasoning, planning, decision-making, and action. As AI agents increasingly interact with humans, organizations, digital platforms, and other agents, they become part of larger socio-technical ecosystems exhibiting complex and adaptive behavior.The talk discusses the evolution from traditional intelligent systems to agent-based ecosystems and highlights key challenges related to emergence, trust, governance, and resilience. It concludes with a vision for engineering future intelligent systems by integrating Systems Thinking, Agentic AI, and systems engineering principles to develop adaptive, trustworthy, and sustainable solutions.",
+    // bio: "Bedir Tekinerdogan is Full Professor and Chair of the Information Technology Group at Wageningen University & Research. His research focuses on software architecture, model-driven engineering, and AI systems design. He has published extensively on systems thinking applied to complex software-intensive systems and leads multiple research projects at the intersection of AI and life sciences.",
     links: [{ label: "WUR Profile", url: "https://www.wur.nl/en/persons/bedir-tekinerdogan.htm" }]
   },
   javed: {
@@ -444,8 +446,8 @@ const speakers = {
     topic: "AI Agent Governance & Compliance",
     img: "images/javed.jpg",
     initials: "JK",
-    abstract: "Who is responsible when an AI agent makes a consequential mistake? This talk addresses the emerging discipline of runtime governance for AI agents — the policies, guardrails, audit trails, and accountability structures that must be in place before autonomous systems can be trusted in production environments. Drawing on experience deploying agentic AI in enterprise settings, the talk will cover practical approaches to monitoring agent behaviour in real time, defining intervention triggers, and building compliance frameworks that satisfy both legal and ethical requirements. The talk will also address how governance requirements change as agents gain more autonomy and begin orchestrating other agents.",
-    bio: "Javed Vassilis Khan is Head of User Experience at Sappi Europe and founder of Wiser-Mark, a consultancy focused on responsible AI deployment. He has extensive experience bridging the gap between technical AI capability and organisational readiness, with a particular focus on AI governance, user trust, and the human factors of agent-based systems.",
+    // abstract: "Who is responsible when an AI agent makes a consequential mistake? This talk addresses the emerging discipline of runtime governance for AI agents — the policies, guardrails, audit trails, and accountability structures that must be in place before autonomous systems can be trusted in production environments. Drawing on experience deploying agentic AI in enterprise settings, the talk will cover practical approaches to monitoring agent behaviour in real time, defining intervention triggers, and building compliance frameworks that satisfy both legal and ethical requirements. The talk will also address how governance requirements change as agents gain more autonomy and begin orchestrating other agents.",
+    // bio: "Javed Vassilis Khan is Head of User Experience at Sappi Europe and founder of Wiser-Mark, a consultancy focused on responsible AI deployment. He has extensive experience bridging the gap between technical AI capability and organisational readiness, with a particular focus on AI governance, user trust, and the human factors of agent-based systems.",
     links: [{ label: "LinkedIn", url: "https://www.linkedin.com/in/vjkhan/" }]
   },
   mohamed: {
@@ -454,8 +456,8 @@ const speakers = {
     topic: "Cloud & Generative AI at Scale",
     img: "images/Mohamed.jpg",
     initials: "ME",
-    abstract: "Building and operating agentic AI systems at the scale of a global streaming platform presents engineering challenges that differ significantly from research prototypes. This lightning talk shares lessons learned from designing cloud-native generative AI architectures at Spotify — including how to handle latency, cost, observability, and failure modes at scale. The talk will discuss how agentic workflows are structured in production, what surprises emerged during deployment, and what architectural patterns have proven most resilient. Particular attention will be given to the tension between agent autonomy and system predictability.",
-    bio: "Mohamed Elkady is a System Architect specialising in Cloud and Generative AI at Spotify. He designs large-scale distributed systems and AI pipelines that serve hundreds of millions of users globally. His work spans cloud infrastructure, machine learning systems, and the emerging field of production-grade agentic AI.",
+    // abstract: "Building and operating agentic AI systems at the scale of a global streaming platform presents engineering challenges that differ significantly from research prototypes. This lightning talk shares lessons learned from designing cloud-native generative AI architectures at Spotify — including how to handle latency, cost, observability, and failure modes at scale. The talk will discuss how agentic workflows are structured in production, what surprises emerged during deployment, and what architectural patterns have proven most resilient. Particular attention will be given to the tension between agent autonomy and system predictability.",
+    // bio: "Mohamed Elkady is a System Architect specialising in Cloud and Generative AI at Spotify. He designs large-scale distributed systems and AI pipelines that serve hundreds of millions of users globally. His work spans cloud infrastructure, machine learning systems, and the emerging field of production-grade agentic AI.",
     links: [{ label: "LinkedIn", url: "#" }]
   },
   osama: {
@@ -464,9 +466,9 @@ const speakers = {
     topic: "Industrial Agentic Workflows",
     img: "images/osama.jpg",
     initials: "OM",
-    abstract: "The energy and industrial sectors are among the most demanding environments for deploying AI agents — where reliability, safety, and interpretability are non-negotiable. This lightning talk presents the state of the art in industrial agentic AI workflows at Shell, including how machine vision and generative AI are being combined to support inspection, maintenance, and operational decision-making. The talk will address the practical realities of integrating agentic systems into legacy industrial infrastructure, the role of human oversight in high-stakes settings, and early results from deployments in the field.",
-    bio: "Osama Mazhar is a Machine Vision and Generative AI Researcher at Shell, where he develops AI systems for industrial inspection and operational intelligence. His research spans computer vision, sensor fusion, and the application of large language models to engineering workflows. He has extensive experience translating AI research into production-ready industrial systems.",
-    links: [{ label: "LinkedIn", url: "#" }]
+    // abstract: "The energy and industrial sectors are among the most demanding environments for deploying AI agents — where reliability, safety, and interpretability are non-negotiable. This lightning talk presents the state of the art in industrial agentic AI workflows at Shell, including how machine vision and generative AI are being combined to support inspection, maintenance, and operational decision-making. The talk will address the practical realities of integrating agentic systems into legacy industrial infrastructure, the role of human oversight in high-stakes settings, and early results from deployments in the field.",
+    // bio: "Osama Mazhar is a Machine Vision and Generative AI Researcher at Shell, where he develops AI systems for industrial inspection and operational intelligence. His research spans computer vision, sensor fusion, and the application of large language models to engineering workflows. He has extensive experience translating AI research into production-ready industrial systems.",
+    links: [{ label: "LinkedIn", url: "https://www.linkedin.com/in/osamamazhar/" }]
   },
   anand: {
     name: "Anand Gavai",
@@ -474,9 +476,9 @@ const speakers = {
     topic: "AI for Digital Health & Agri-Food",
     img: "images/anand.jpg",
     initials: "AG",
-    abstract: "Agentic AI is beginning to show genuine promise in two domains with high societal stakes: digital health and agri-food systems. This talk presents a cross-domain view of use cases — from AI agents that support clinical decision-making and chronic disease management, to agents that monitor crop health, optimise irrigation, and assist with food supply chain decisions. The talk will highlight what these domains share (the need for explainability, domain-expert oversight, and robustness to distribution shift) and where they diverge (regulatory environments, data availability, trust dynamics). The goal is to give participants a grounded picture of where agentic AI is delivering real value today, and what the key open challenges are.",
-    bio: "Anand Gavai is an Expert Evaluator for the Horizon Europe EIC Accelerator programme, where he assesses deep-tech proposals in AI, health, and agri-food. He has a background in applied AI research and has worked extensively on AI for precision agriculture and digital health applications across Europe and Asia.",
-    links: [{ label: "LinkedIn", url: "#" }]
+    // abstract: "Agentic AI is beginning to show genuine promise in two domains with high societal stakes: digital health and agri-food systems. This talk presents a cross-domain view of use cases — from AI agents that support clinical decision-making and chronic disease management, to agents that monitor crop health, optimise irrigation, and assist with food supply chain decisions. The talk will highlight what these domains share (the need for explainability, domain-expert oversight, and robustness to distribution shift) and where they diverge (regulatory environments, data availability, trust dynamics). The goal is to give participants a grounded picture of where agentic AI is delivering real value today, and what the key open challenges are.",
+    // bio: "Anand Gavai is an Expert Evaluator for the Horizon Europe EIC Accelerator programme, where he assesses deep-tech proposals in AI, health, and agri-food. He has a background in applied AI research and has worked extensively on AI for precision agriculture and digital health applications across Europe and Asia.",
+    links: [{ label: "LinkedIn", url: "https://www.linkedin.com/in/anand-gavai-a48755275" }]
   },
   pinglin: {
     name: "Pinglin Zhang",
@@ -486,7 +488,7 @@ const speakers = {
     initials: "PZ",
     abstract: "Greenhouse horticulture is a data-rich, time-sensitive domain where AI can make a tangible difference — but also where the gap between research prototypes and grower-ready tools remains large. This talk presents work on integrating machine learning with sensor networks inside greenhouse environments, covering crop monitoring, climate control optimisation, and early detection of disease and stress. The talk will also discuss where agentic approaches — systems that can monitor, decide, and act autonomously on sensor data — are being explored and what the key barriers to adoption are among growers. This talk directly addresses the original motivation for this workshop series and provides a concrete anchor for the domain-applications breakout group.",
     bio: "Pinglin Zhang is a researcher at Wageningen Research specialising in machine learning and sensor systems for greenhouse horticulture. Her work focuses on applying deep learning and computer vision to real-world agricultural challenges, including crop phenotyping, yield prediction, and autonomous sensing in controlled environment agriculture.",
-    links: [{ label: "Email", url: "mailto:pinglin.zhang@wur.nl" }]
+    links: [{ label: "LinkedIn", url: "https://www.linkedin.com/in/pinglinzhang/" }]
   }
 };
 
