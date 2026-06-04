@@ -79,6 +79,18 @@
     }
     .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,151,42,.4); }
 
+    .sponsor-bar { display: flex; align-items: center; gap: 12px; margin-top: 28px; }
+    .sponsor-label { font-size: .78rem; color: rgba(255,255,255,.55); letter-spacing: .08em; text-transform: uppercase; }
+    .sponsor-link { text-decoration: none; }
+    .sponsor-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
+      color: var(--white); font-size: .82rem; font-weight: 600; letter-spacing: .06em;
+      padding: 5px 14px; border-radius: 20px;
+      transition: background .2s, border-color .2s;
+    }
+    .sponsor-badge:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.5); }
+
     section { padding: 72px 2rem; }
     section:nth-child(even) { background: var(--white); }
     .section-inner { max-width: 860px; margin: 0 auto; }
@@ -258,6 +270,12 @@
       </div>
     </div>
     <a href="#register" class="hero-btn">Register Now →</a>
+    <div class="sponsor-bar">
+      <span class="sponsor-label">Supported by</span>
+      <a href="https://www.4tu.nl/nirict/Projects/All_projects/Agentic%20AI%20for%20Energy%20Management%20in%20Horticulture%20Integrating%20Systems%20Thinking%2C%20Electrical%20Constraints%2C%20and%20Human%20Oversight/" target="_blank" rel="noopener" class="sponsor-link">
+        <span class="sponsor-badge">4TU.NIRICT</span>
+      </a>
+    </div>
   </div>
 </header>
 
