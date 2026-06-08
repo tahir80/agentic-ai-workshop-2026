@@ -91,6 +91,17 @@
     .obj-num { font-family: var(--serif); font-size: 2rem; color: var(--moss); line-height: 1; margin-bottom: 8px; }
     .obj-card p { font-size: .95rem; color: var(--ink-mid); line-height: 1.55; }
 
+    /* ── THEMES ── */
+    .themes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 32px; }
+    .theme-card {
+      background: var(--white); border: 1px solid var(--cream-dark);
+      border-radius: var(--r); padding: 20px 20px 16px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .theme-num { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--moss-mid); }
+    .theme-title { font-weight: 600; font-size: 1rem; color: var(--ink); line-height: 1.3; }
+    .theme-desc { font-size: .88rem; color: var(--ink-light); line-height: 1.55; }
+
     .info-strip { display: flex; flex-wrap: wrap; gap: 12px; margin: 36px 0 0; }
     .info-strip-item { background: var(--cream-dark); border-radius: var(--r); padding: 14px 20px; flex: 1 1 200px; }
     .info-strip-item strong { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-light); margin-bottom: 4px; }
@@ -234,7 +245,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#agenda">Agenda</a></li>
     <li><a href="#speakers">Speakers</a></li>
-    <li><a href="breakouts.html">Breakout Sessions</a></li>
+    <!-- <li><a href="breakouts.html">Breakout Sessions</a></li> -->
     <li><a href="#register" class="nav-cta">Register</a></li>
   </ul>
 </nav>
@@ -275,6 +286,32 @@
       <div class="obj-card"><div class="obj-num">03</div><p>Explore domain-specific use cases — greenhouse horticulture, bioinformatics, digital health, agri-food — and what responsible deployment looks like.</p></div>
       <div class="obj-card"><div class="obj-num">04</div><p>Co-create a shared research agenda that bridges academia and industry.</p></div>
     </div>
+    <p class="section-label" style="margin-top:48px;">Emerging Themes</p>
+    <h2 class="section-title" style="font-size:clamp(1.3rem,2.5vw,1.8rem);">What Participants Want to Explore</h2>
+    <p class="section-lead" style="margin-bottom:0;">Based on registrations, four themes are shaping the interactive part of the workshop.</p>
+    <div class="themes-grid">
+      <div class="theme-card">
+        <div class="theme-num">Theme 1</div>
+        <div class="theme-title">Agentic AI in Practice</div>
+        <div class="theme-desc">Designing and deploying AI agents in real workflows — from research to industrial applications.</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-num">Theme 2</div>
+        <div class="theme-title">AI for Research &amp; Academic Work</div>
+        <div class="theme-desc">Practical use of AI across the research cycle — data analysis, literature review, and scientific writing.</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-num">Theme 3</div>
+        <div class="theme-title">AI Governance, Ethics &amp; Environmental Impact</div>
+        <div class="theme-desc">The responsible side of AI — runtime governance, security, privacy, and the societal costs of scaling AI systems.</div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-num">Theme 4</div>
+        <div class="theme-title">Domain Applications: Agri-Food, Horticulture &amp; Bioinformatics</div>
+        <div class="theme-desc">Sector-specific use cases and what responsible deployment looks like in life sciences domains.</div>
+      </div>
+    </div>
+
     <div class="info-strip">
       <div class="info-strip-item"><strong>Format</strong><span>Online (Zoom) · Half-day</span></div>
       <div class="info-strip-item"><strong>Date &amp; Time</strong><span>1 July 2026 · 13:00–16:00 CET</span></div>
@@ -300,7 +337,7 @@
       <div class="agenda-item"><div class="agenda-time">14:15</div><div class="agenda-body"><div class="agenda-title">Break + Breakout Briefing <span class="agenda-tag tag-break">Break</span></div><div class="agenda-desc">10-minute break. Facilitator explains the Lightning Decision Jam format and participants move to their pre-assigned Zoom breakout rooms.</div></div></div>
       <div class="agenda-item"><div class="agenda-time">14:25</div><div class="agenda-body"><div class="agenda-title">Breakout Sessions — Lightning Decision Jam <span class="agenda-tag tag-active">Interactive</span></div><div class="agenda-desc">4–5 parallel groups work on structured challenge canvases in Miro. Each group applies the same LDJ method to a different theme. AI tools (Claude, Elicit, Miro AI) available throughout.</div></div></div>
       <div class="agenda-item"><div class="agenda-time">15:15</div><div class="agenda-body"><div class="agenda-title">Group Report-Back &amp; Synthesis <span class="agenda-tag tag-active">Interactive</span></div><div class="agenda-desc">Each group presents a 3-minute summary. Key insights are posted to a shared Miro board and the full group votes using Dotmocracy to surface the top priorities.</div></div></div>
-      <div class="agenda-item"><div class="agenda-time">15:45</div><div class="agenda-body"><div class="agenda-title">Closing: Outcomes &amp; Next Steps <span class="agenda-tag tag-break">Closing</span></div><div class="agenda-desc">Organiser synthesises live results. QR code for post-workshop survey. Commitment cards.</div></div></div>
+      <div class="agenda-item"><div class="agenda-time">15:45</div><div class="agenda-body"><div class="agenda-title">Closing: Outcomes &amp; Next Steps <span class="agenda-tag tag-break">Closing</span></div><div class="agenda-desc">Organiser synthesises live results.</div></div></div>
     </div>
   </div>
 </section>
