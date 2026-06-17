@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* ── RESET & TOKENS ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --moss:       #2d5a3d;
@@ -23,22 +22,12 @@
       --white:      #ffffff;
       --blue:       #2563eb;
       --blue-light: #dbeafe;
-      --purple:     #7c3aed;
-      --purple-light: #ede9fe;
       --serif: 'DM Serif Display', Georgia, serif;
       --sans:  'DM Sans', system-ui, sans-serif;
       --r: 8px;
-      --shadow: 0 2px 12px rgba(0,0,0,.08);
     }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--sans);
-      background: var(--cream);
-      color: var(--ink);
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 100vh;
-    }
+    body { font-family: var(--sans); background: var(--cream); color: var(--ink); font-size: 16px; line-height: 1.6; min-height: 100vh; }
 
     /* ── TOP BAR ── */
     .topbar {
@@ -48,1371 +37,707 @@
       padding: 0 1.5rem; height: 54px;
       box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
-    .topbar-brand {
-      font-family: var(--serif); color: var(--white);
-      font-size: 1rem; white-space: nowrap;
-      text-decoration: none;
-    }
+    .topbar-brand { font-family: var(--serif); color: var(--white); font-size: 1rem; text-decoration: none; }
     .topbar-right { display: flex; align-items: center; gap: 12px; }
     .toc-btn {
       background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
       color: var(--white); padding: 5px 14px; border-radius: 20px;
       font-size: .82rem; font-weight: 600; cursor: pointer; font-family: var(--sans);
-      transition: background .2s;
     }
-    .toc-btn:hover { background: rgba(255,255,255,.25); }
-    .back-link {
-      color: rgba(255,255,255,.65); font-size: .82rem;
-      text-decoration: none; letter-spacing: .04em;
-    }
+    .back-link { color: rgba(255,255,255,.65); font-size: .82rem; text-decoration: none; }
     .back-link:hover { color: var(--white); }
 
     /* ── PROGRESS BAR ── */
-    .progress-track {
-      height: 4px; background: var(--cream-dark); width: 100%;
-    }
-    .progress-fill {
-      height: 100%; background: var(--gold);
-      transition: width .4s ease;
-    }
+    .progress-track { height: 4px; background: var(--cream-dark); }
+    .progress-fill { height: 100%; background: var(--gold); transition: width .4s ease; }
 
-    /* ── TABLE OF CONTENTS OVERLAY ── */
-    .toc-overlay {
-      display: none; position: fixed; inset: 0; z-index: 300;
-      background: rgba(15,26,18,.55); backdrop-filter: blur(3px);
-    }
+    /* ── TOC OVERLAY ── */
+    .toc-overlay { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(15,26,18,.55); }
     .toc-overlay.open { display: flex; align-items: flex-start; justify-content: flex-end; }
-    .toc-panel {
-      background: var(--white); width: min(380px, 92vw);
-      height: 100vh; overflow-y: auto;
-      padding: 24px 20px; box-shadow: -4px 0 24px rgba(0,0,0,.18);
-    }
-    .toc-panel h2 { font-family: var(--serif); font-size: 1.3rem; color: var(--ink); margin-bottom: 4px; }
+    .toc-panel { background: var(--white); width: min(360px, 92vw); height: 100vh; overflow-y: auto; padding: 24px 20px; box-shadow: -4px 0 24px rgba(0,0,0,.18); position: relative; }
+    .toc-panel h2 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 4px; }
     .toc-panel p { font-size: .82rem; color: var(--ink-light); margin-bottom: 20px; }
-    .toc-close {
-      position: absolute; top: 14px; right: 16px;
-      background: none; border: none; font-size: 1.4rem;
-      cursor: pointer; color: var(--ink-light);
-    }
-    .toc-phase { font-size: .7rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--ink-light); margin: 16px 0 8px; }
-    .toc-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 8px 10px; border-radius: var(--r); cursor: pointer;
-      transition: background .15s; margin-bottom: 2px;
-      border: none; background: none; width: 100%; text-align: left;
-      font-family: var(--sans); font-size: .9rem; color: var(--ink-mid);
-    }
+    .toc-close { position: absolute; top: 14px; right: 16px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--ink-light); }
+    .toc-phase { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-light); margin: 16px 0 8px; }
+    .toc-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--r); cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: var(--sans); font-size: .9rem; color: var(--ink-mid); margin-bottom: 2px; }
     .toc-item:hover { background: var(--cream); }
     .toc-item.active { background: var(--moss-light); color: var(--moss); font-weight: 600; }
-    .toc-dot {
-      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .72rem; font-weight: 700;
-    }
-    .dot-affinity { background: var(--blue-light); color: var(--blue); }
-    .dot-ldj      { background: var(--moss-light); color: var(--moss); }
-    .dot-landing  { background: var(--gold-light); color: var(--gold); }
-    .toc-duration { margin-left: auto; font-size: .75rem; color: var(--ink-light); white-space: nowrap; }
+    .toc-dot { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; }
+    .dot-blue  { background: var(--blue-light); color: var(--blue); }
+    .dot-green { background: var(--moss-light); color: var(--moss); }
+    .dot-gold  { background: var(--gold-light); color: var(--gold); }
+    .toc-dur { margin-left: auto; font-size: .75rem; color: var(--ink-light); white-space: nowrap; }
 
-    /* ── MAIN LAYOUT ── */
-    .main { max-width: 780px; margin: 0 auto; padding: 0 1.5rem 6rem; }
+    /* ── MAIN ── */
+    .main { max-width: 720px; margin: 0 auto; padding: 0 1.5rem 6rem; }
 
-    /* ── SCREEN SYSTEM ── */
-    .screen { display: none; animation: fadeIn .25s ease; }
+    /* ── SCREENS ── */
+    .screen { display: none; animation: fadeIn .2s ease; }
     .screen.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
     /* ── LANDING ── */
-    .landing-hero {
+    .hero {
       background: var(--moss); border-radius: var(--r);
-      padding: 48px 40px; margin: 32px 0 24px; position: relative; overflow: hidden;
+      padding: 40px 36px; margin: 28px 0 20px; position: relative; overflow: hidden;
     }
-    .landing-hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 80% 40%, rgba(200,151,42,.15), transparent);
-      pointer-events: none;
-    }
-    .landing-hero h1 {
-      font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem);
-      color: var(--white); line-height: 1.15; margin-bottom: 12px;
-    }
-    .landing-hero h1 em { color: var(--gold); font-style: italic; }
-    .landing-hero p { color: rgba(255,255,255,.78); font-size: 1rem; max-width: 500px; margin-bottom: 24px; }
-    .landing-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-    .landing-chip {
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
-      color: var(--white); padding: 6px 14px; border-radius: 20px; font-size: .85rem;
-    }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 80% 40%, rgba(200,151,42,.15), transparent); pointer-events: none; }
+    .hero h1 { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--white); line-height: 1.15; margin-bottom: 10px; }
+    .hero p { color: rgba(255,255,255,.75); font-size: .95rem; max-width: 460px; margin-bottom: 20px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); color: var(--white); padding: 5px 12px; border-radius: 20px; font-size: .82rem; }
 
-    .phase-block {
-      background: var(--white); border-radius: var(--r); border: 1px solid var(--cream-dark);
-      padding: 28px; margin-bottom: 16px;
+    .miro-banner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      background: var(--white); border: 1px solid var(--cream-dark); border-radius: var(--r);
+      padding: 16px 20px; margin-bottom: 20px;
     }
-    .phase-label {
-      font-size: .72rem; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; margin-bottom: 6px;
+    .miro-banner span { font-size: .9rem; color: var(--ink-mid); }
+    .miro-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--moss); color: var(--white);
+      padding: 8px 18px; border-radius: 20px; font-weight: 600; font-size: .88rem;
+      text-decoration: none; transition: opacity .2s;
     }
-    .phase-label.blue  { color: var(--blue); }
-    .phase-label.green { color: var(--moss); }
-    .phase-block h2 { font-family: var(--serif); font-size: 1.4rem; color: var(--ink); margin-bottom: 8px; }
-    .phase-block p { font-size: .95rem; color: var(--ink-mid); margin-bottom: 16px; }
-    .step-list { display: flex; flex-direction: column; gap: 6px; }
-    .step-pill {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--cream); border-radius: 6px; padding: 10px 14px;
-      cursor: pointer; transition: background .15s; border: none;
-      font-family: var(--sans); width: 100%; text-align: left;
-    }
-    .step-pill:hover { background: var(--cream-dark); }
-    .step-pill-num {
-      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: .75rem; font-weight: 700;
-    }
-    .num-blue  { background: var(--blue-light);   color: var(--blue); }
-    .num-green { background: var(--moss-light);    color: var(--moss); }
-    .step-pill-title { font-size: .92rem; color: var(--ink); font-weight: 500; flex: 1; }
-    .step-pill-time  { font-size: .8rem; color: var(--ink-light); white-space: nowrap; }
+    .miro-link:hover { opacity: .85; }
 
-    .start-btn {
-      display: inline-block; margin-top: 8px;
-      background: var(--gold); color: var(--ink);
-      padding: 13px 28px; border-radius: 30px;
-      font-weight: 700; font-size: .95rem; cursor: pointer;
-      border: none; font-family: var(--sans);
-      transition: transform .2s, box-shadow .2s;
-    }
+    .phase-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: var(--r); padding: 22px 24px; margin-bottom: 14px; }
+    .phase-tag { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; display: block; }
+    .tag-blue  { color: var(--blue); }
+    .tag-green { color: var(--moss); }
+    .phase-card h2 { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 6px; }
+    .phase-card p { font-size: .88rem; color: var(--ink-mid); margin-bottom: 14px; }
+    .step-rows { display: flex; flex-direction: column; gap: 6px; }
+    .step-row { display: flex; align-items: center; gap: 10px; background: var(--cream); border-radius: 6px; padding: 9px 12px; cursor: pointer; border: none; font-family: var(--sans); width: 100%; text-align: left; transition: background .15s; }
+    .step-row:hover { background: var(--cream-dark); }
+    .snum { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: .72rem; font-weight: 700; }
+    .snum-blue  { background: var(--blue-light);  color: var(--blue); }
+    .snum-green { background: var(--moss-light); color: var(--moss); }
+    .stitle { font-size: .9rem; color: var(--ink); font-weight: 500; flex: 1; }
+    .sdur   { font-size: .78rem; color: var(--ink-light); }
+
+    .start-btn { display: inline-block; margin-top: 6px; background: var(--gold); color: var(--ink); padding: 12px 26px; border-radius: 30px; font-weight: 700; font-size: .92rem; cursor: pointer; border: none; font-family: var(--sans); transition: transform .2s, box-shadow .2s; }
     .start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,151,42,.4); }
 
-    /* ── STEP PAGES ── */
-    .step-header { padding: 32px 0 8px; }
-    .step-phase-tag {
-      display: inline-block; font-size: .72rem; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: 3px 12px; border-radius: 20px; margin-bottom: 10px;
-    }
-    .tag-affinity { background: var(--blue-light);    color: var(--blue); }
-    .tag-ldj      { background: var(--moss-light);    color: var(--moss); }
-    .tag-transition { background: var(--gold-light);  color: var(--gold); }
-    .step-eyebrow {
-      font-size: .8rem; font-weight: 600; letter-spacing: .08em;
-      text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px;
-    }
-    .step-title {
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      color: var(--ink); line-height: 1.15; margin-bottom: 16px;
-    }
-    .step-timer {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--gold-light); color: var(--gold);
-      padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 1rem;
-      margin-bottom: 24px;
-    }
+    /* ── STEP PAGE ── */
+    .step-top { padding: 28px 0 6px; }
+    .step-phase { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 11px; border-radius: 20px; margin-bottom: 8px; }
+    .sp-blue   { background: var(--blue-light);  color: var(--blue); }
+    .sp-green  { background: var(--moss-light);  color: var(--moss); }
+    .sp-gold   { background: var(--gold-light);  color: var(--gold); }
+    .step-num  { font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px; }
+    .step-title { font-family: var(--serif); font-size: clamp(1.5rem, 4vw, 2.2rem); color: var(--ink); line-height: 1.15; margin-bottom: 12px; }
+    .timer { display: inline-flex; align-items: center; gap: 7px; background: var(--gold-light); color: var(--gold); padding: 5px 14px; border-radius: 20px; font-weight: 700; font-size: .95rem; margin-bottom: 20px; }
 
-    .objective-box {
-      background: var(--moss-light); border-left: 4px solid var(--moss);
-      border-radius: 0 var(--r) var(--r) 0;
-      padding: 16px 20px; margin-bottom: 28px;
-    }
-    .objective-box .label {
-      font-size: .72rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--moss); margin-bottom: 4px;
-    }
-    .objective-box p { font-size: .98rem; color: var(--ink-mid); line-height: 1.6; }
+    .objective { background: var(--moss-light); border-left: 4px solid var(--moss); border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; margin-bottom: 20px; }
+    .objective .lbl { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--moss); margin-bottom: 2px; }
+    .objective p { font-size: .92rem; color: var(--ink-mid); }
 
-    /* Instruction cards */
-    .instructions { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
-    .instr-card {
-      background: var(--white); border: 1px solid var(--cream-dark);
-      border-radius: var(--r); padding: 18px 20px;
-      display: flex; align-items: flex-start; gap: 14px;
-    }
-    .instr-num {
-      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: .85rem; margin-top: 1px;
-    }
-    .instr-num.blue  { background: var(--blue-light);  color: var(--blue); }
-    .instr-num.green { background: var(--moss-light);  color: var(--moss); }
-    .instr-body strong { display: block; font-size: .95rem; color: var(--ink); margin-bottom: 3px; }
-    .instr-body p     { font-size: .9rem; color: var(--ink-mid); line-height: 1.55; }
+    /* Instruction steps */
+    .instrs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .instr { display: flex; align-items: flex-start; gap: 12px; background: var(--white); border: 1px solid var(--cream-dark); border-radius: var(--r); padding: 14px 16px; }
+    .inum { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .8rem; margin-top: 1px; }
+    .inum-blue  { background: var(--blue-light);  color: var(--blue); }
+    .inum-green { background: var(--moss-light); color: var(--moss); }
+    .ibody strong { display: block; font-size: .93rem; color: var(--ink); }
+    .ibody p { font-size: .86rem; color: var(--ink-mid); margin-top: 2px; line-height: 1.5; }
 
-    /* Facilitator note */
-    .facilitator-note {
-      background: var(--gold-light); border-left: 4px solid var(--gold);
-      border-radius: 0 var(--r) var(--r) 0;
-      padding: 14px 18px; margin-bottom: 24px;
-    }
-    .facilitator-note .label {
-      font-size: .7rem; font-weight: 700; letter-spacing: .1em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 4px;
-    }
-    .facilitator-note p { font-size: .88rem; color: var(--ink-mid); line-height: 1.55; }
+    .fnote { background: var(--gold-light); border-left: 4px solid var(--gold); border-radius: 0 var(--r) var(--r) 0; padding: 11px 15px; margin-bottom: 20px; }
+    .fnote .lbl { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+    .fnote p { font-size: .86rem; color: var(--ink-mid); }
 
-    /* Diagram */
-    .diagram {
-      background: var(--white); border: 1px solid var(--cream-dark);
-      border-radius: var(--r); padding: 24px; margin-bottom: 24px; text-align: center;
-    }
-    .diagram svg { max-width: 100%; height: auto; }
-    .diagram-caption { font-size: .82rem; color: var(--ink-light); margin-top: 10px; }
+    /* Miro button inline */
+    .miro-inline { display: inline-flex; align-items: center; gap: 6px; background: var(--moss); color: var(--white); padding: 7px 16px; border-radius: 20px; font-weight: 600; font-size: .85rem; text-decoration: none; margin-bottom: 20px; }
+    .miro-inline:hover { opacity: .85; }
 
-    /* Quadrant diagram */
-    .quadrant-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 2px; margin-bottom: 24px; border-radius: var(--r); overflow: hidden;
-    }
-    .quadrant {
-      padding: 20px 16px; min-height: 110px;
-    }
-    .q-tl { background: #d1fae5; }
-    .q-tr { background: #dbeafe; }
-    .q-bl { background: var(--cream-dark); }
-    .q-br { background: #fee2e2; }
-    .quadrant .q-label { font-size: .72rem; font-weight: 700; letter-spacing: .08em;
-      text-transform: uppercase; margin-bottom: 4px; }
-    .q-tl .q-label { color: #065f46; }
-    .q-tr .q-label { color: #1e40af; }
-    .q-bl .q-label { color: #4b5563; }
-    .q-br .q-label { color: #991b1b; }
-    .quadrant .q-title { font-size: .95rem; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-    .quadrant .q-desc  { font-size: .82rem; color: var(--ink-mid); line-height: 1.4; }
-    .quadrant .q-action { font-size: .8rem; font-weight: 600; margin-top: 6px; }
-    .q-tl .q-action { color: #065f46; }
-    .q-tr .q-action { color: #1e40af; }
-    .q-bl .q-action { color: #4b5563; }
-    .q-br .q-action { color: #991b1b; }
-    .quadrant-axes {
-      display: flex; flex-direction: column; align-items: center;
-      margin-bottom: 8px; gap: 2px;
-    }
-    .axis-label {
-      font-size: .78rem; font-weight: 600; color: var(--ink-light);
-      text-transform: uppercase; letter-spacing: .06em;
-    }
+    /* Transition */
+    .transition-box { background: var(--moss); border-radius: var(--r); padding: 40px 36px; margin: 28px 0; text-align: center; position: relative; overflow: hidden; }
+    .transition-box::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,151,42,.15), transparent); pointer-events: none; }
+    .transition-box .icon { font-size: 2.4rem; margin-bottom: 12px; }
+    .transition-box h2 { font-family: var(--serif); font-size: 1.7rem; color: var(--white); margin-bottom: 10px; }
+    .transition-box p { color: rgba(255,255,255,.75); font-size: .95rem; max-width: 440px; margin: 0 auto 20px; }
+    .phase-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .ppill { padding: 5px 14px; border-radius: 20px; font-size: .8rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .ppill-blue  { background: var(--blue-light);  color: var(--blue); }
+    .ppill-green { background: var(--moss-light); color: var(--moss); }
 
-    /* Transition screen */
-    .transition-screen {
-      background: var(--moss); border-radius: var(--r);
-      padding: 48px 40px; margin: 32px 0; text-align: center; position: relative; overflow: hidden;
-    }
-    .transition-screen::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,151,42,.15), transparent);
-      pointer-events: none;
-    }
-    .transition-screen .icon { font-size: 3rem; margin-bottom: 16px; }
-    .transition-screen h2 { font-family: var(--serif); font-size: 1.8rem; color: var(--white); margin-bottom: 12px; }
-    .transition-screen p { color: rgba(255,255,255,.78); font-size: 1rem; max-width: 480px; margin: 0 auto 24px; line-height: 1.65; }
-    .transition-divider {
-      display: flex; align-items: center; gap: 16px; margin: 28px 0;
-      color: rgba(255,255,255,.4); font-size: .82rem;
-    }
-    .transition-divider::before, .transition-divider::after {
-      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.2);
-    }
-    .phase-pill {
-      display: inline-block; padding: 6px 16px; border-radius: 20px;
-      font-size: .82rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-    }
-    .phase-pill.blue  { background: var(--blue-light);  color: var(--blue); }
-    .phase-pill.green { background: var(--moss-light);  color: var(--moss); }
+    /* Quadrant */
+    .quadrant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; border-radius: var(--r); overflow: hidden; margin-bottom: 20px; }
+    .quad { padding: 16px 14px; }
+    .q-tl { background: #d1fae5; } .q-tr { background: #dbeafe; }
+    .q-bl { background: var(--cream-dark); } .q-br { background: #fee2e2; }
+    .quad .ql { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 2px; }
+    .q-tl .ql { color: #065f46; } .q-tr .ql { color: #1e40af; }
+    .q-bl .ql { color: #4b5563; } .q-br .ql { color: #991b1b; }
+    .quad .qt { font-size: .9rem; font-weight: 700; color: var(--ink); }
+    .quad .qa { font-size: .78rem; font-weight: 600; margin-top: 4px; }
+    .q-tl .qa { color: #065f46; } .q-tr .qa { color: #1e40af; }
+    .q-bl .qa { color: #4b5563; } .q-br .qa { color: #991b1b; }
+    .axis-row { display: flex; justify-content: space-between; font-size: .75rem; color: var(--ink-light); margin-bottom: 4px; padding: 0 2px; }
 
-    /* ── NAVIGATION ── */
-    .step-nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 24px 0 0; border-top: 1px solid var(--cream-dark); margin-top: 32px;
-    }
-    .nav-btn {
-      display: flex; align-items: center; gap: 8px;
-      padding: 11px 22px; border-radius: 30px; font-weight: 600;
-      font-size: .9rem; cursor: pointer; font-family: var(--sans);
-      border: none; transition: transform .15s, box-shadow .15s;
-    }
-    .nav-btn:hover { transform: translateY(-1px); }
+    /* Nav */
+    .step-nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 0; border-top: 1px solid var(--cream-dark); margin-top: 24px; }
+    .nbtn { display: flex; align-items: center; gap: 7px; padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: .88rem; cursor: pointer; font-family: var(--sans); border: none; transition: transform .15s; }
+    .nbtn:hover { transform: translateY(-1px); }
     .btn-prev { background: var(--cream-dark); color: var(--ink); }
-    .btn-prev:hover { box-shadow: 0 3px 10px rgba(0,0,0,.1); }
     .btn-next { background: var(--moss); color: var(--white); }
-    .btn-next:hover { box-shadow: 0 4px 14px rgba(45,90,61,.35); }
-    .btn-next.gold { background: var(--gold); color: var(--ink); }
-    .btn-next.gold:hover { box-shadow: 0 4px 14px rgba(200,151,42,.4); }
-    .nav-step-info { text-align: center; }
-    .nav-step-info .current { font-size: .82rem; font-weight: 600; color: var(--ink); }
-    .nav-step-info .total   { font-size: .75rem; color: var(--ink-light); }
+    .btn-gold  { background: var(--gold); color: var(--ink); }
+    .nav-info .cur { font-size: .8rem; font-weight: 600; color: var(--ink); text-align: center; }
+    .nav-info .sub { font-size: .72rem; color: var(--ink-light); text-align: center; }
 
-    /* ── MATERIALS BADGE ── */
-    .materials {
-      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
-    }
-    .material-tag {
-      display: flex; align-items: center; gap: 5px;
-      background: var(--cream-dark); padding: 5px 12px; border-radius: 20px;
-      font-size: .82rem; color: var(--ink-mid);
-    }
+    /* Complete */
+    .complete-box { background: var(--moss); border-radius: var(--r); padding: 28px; margin-top: 20px; text-align: center; }
+    .complete-box h3 { font-family: var(--serif); color: var(--white); font-size: 1.3rem; margin: 8px 0 6px; }
+    .complete-box p { color: rgba(255,255,255,.75); font-size: .9rem; }
 
-    /* ── PRINT ── */
     @media print {
-      .topbar, .toc-overlay, .step-nav, .toc-btn, .back-link, .progress-track,
-      .start-btn, .step-pill { display: none !important; }
+      .topbar, .toc-overlay, .step-nav, .toc-btn, .back-link, .progress-track { display: none !important; }
       .screen { display: block !important; page-break-before: always; }
-      .screen:first-of-type { page-break-before: auto; }
-      body { background: white; }
     }
-
-    /* ── MOBILE ── */
     @media (max-width: 600px) {
-      .landing-hero { padding: 28px 20px; }
-      .phase-block  { padding: 20px 16px; }
-      .step-header  { padding: 20px 0 4px; }
-      .transition-screen { padding: 32px 20px; }
-      .topbar { padding: 0 1rem; }
+      .hero, .transition-box { padding: 24px 18px; }
+      .phase-card { padding: 18px 16px; }
       .main { padding: 0 1rem 5rem; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── TOP BAR ── -->
+<!-- TOP BAR -->
 <div class="topbar">
   <a href="index.html" class="topbar-brand">Agentic AI · 2026</a>
   <div class="topbar-right">
-    <a href="index.html" class="back-link">← Back to workshop</a>
-    <button class="toc-btn" onclick="toggleTOC()">☰ Contents</button>
+    <a href="index.html" class="back-link">← Back</a>
+    <button class="toc-btn" onclick="toggleTOC()">☰ Steps</button>
   </div>
 </div>
+<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 
-<!-- ── PROGRESS BAR ── -->
-<div class="progress-track">
-  <div class="progress-fill" id="progressFill" style="width:0%"></div>
-</div>
-
-<!-- ── TABLE OF CONTENTS OVERLAY ── -->
+<!-- TOC OVERLAY -->
 <div class="toc-overlay" id="tocOverlay" onclick="closeTOC(event)">
   <div class="toc-panel">
     <button class="toc-close" onclick="toggleTOC()">✕</button>
-    <h2>Workshop Guide</h2>
-    <p>Click any step to jump directly to it.</p>
-
-    <button class="toc-item" onclick="goTo(0)">
-      <span class="toc-dot dot-landing">🏠</span>
-      <span>Overview</span>
-    </button>
+    <h2>Workshop Steps</h2>
+    <p>Jump to any step.</p>
+    <button class="toc-item" onclick="goTo(0)"><span class="toc-dot dot-gold">🏠</span>Overview</button>
 
     <div class="toc-phase">Phase 1 · Affinity Map</div>
     <button class="toc-item" id="toc-1" onclick="goTo(1)">
-      <span class="toc-dot dot-affinity">1</span>
-      <span>Set the Question</span>
-      <span class="toc-duration">Setup</span>
-    </button>
-    <button class="toc-item" id="toc-2" onclick="goTo(2)">
-      <span class="toc-dot dot-affinity">2</span>
-      <span>Silent Problem Writing</span>
-      <span class="toc-duration">10 min</span>
-    </button>
-    <button class="toc-item" id="toc-3" onclick="goTo(3)">
-      <span class="toc-dot dot-affinity">3</span>
-      <span>Post & Display</span>
-      <span class="toc-duration">5 min</span>
-    </button>
-    <button class="toc-item" id="toc-4" onclick="goTo(4)">
-      <span class="toc-dot dot-affinity">4</span>
-      <span>Sort & Cluster</span>
-      <span class="toc-duration">10 min</span>
-    </button>
-    <button class="toc-item" id="toc-5" onclick="goTo(5)">
-      <span class="toc-dot dot-affinity">5</span>
-      <span>Name the Categories</span>
-      <span class="toc-duration">5 min</span>
+      <span class="toc-dot dot-blue">AM</span>Affinity Map<span class="toc-dur">10 min</span>
     </button>
 
     <div class="toc-phase">Transition</div>
-    <button class="toc-item" id="toc-6" onclick="goTo(6)">
-      <span class="toc-dot dot-landing">→</span>
-      <span>From Exploration to Action</span>
+    <button class="toc-item" id="toc-2" onclick="goTo(2)">
+      <span class="toc-dot dot-gold">→</span>From Exploration to Action
     </button>
 
     <div class="toc-phase">Phase 2 · Lightning Decision Jam</div>
-    <button class="toc-item" id="toc-7" onclick="goTo(7)">
-      <span class="toc-dot dot-ldj">1</span>
-      <span>Start on a Positive Note</span>
-      <span class="toc-duration">10 min</span>
-    </button>
-    <button class="toc-item" id="toc-8" onclick="goTo(8)">
-      <span class="toc-dot dot-ldj">2</span>
-      <span>Capture Problems</span>
-      <span class="toc-duration">5 min</span>
-    </button>
-    <button class="toc-item" id="toc-9" onclick="goTo(9)">
-      <span class="toc-dot dot-ldj">3</span>
-      <span>Prioritize Problems</span>
-      <span class="toc-duration">3 min</span>
-    </button>
-    <button class="toc-item" id="toc-10" onclick="goTo(10)">
-      <span class="toc-dot dot-ldj">4</span>
-      <span>Reframe as "How Might We"</span>
-      <span class="toc-duration">3 min</span>
-    </button>
-    <button class="toc-item" id="toc-11" onclick="goTo(11)">
-      <span class="toc-dot dot-ldj">5</span>
-      <span>Ideate Solutions</span>
-      <span class="toc-duration">6 min</span>
-    </button>
-    <button class="toc-item" id="toc-12" onclick="goTo(12)">
-      <span class="toc-dot dot-ldj">6</span>
-      <span>Prioritize Solutions</span>
-      <span class="toc-duration">5 min</span>
-    </button>
-    <button class="toc-item" id="toc-13" onclick="goTo(13)">
-      <span class="toc-dot dot-ldj">7</span>
-      <span>Effort / Impact Scale</span>
-      <span class="toc-duration">10 min</span>
-    </button>
-    <button class="toc-item" id="toc-14" onclick="goTo(14)">
-      <span class="toc-dot dot-ldj">8</span>
-      <span>Make It Actionable</span>
-      <span class="toc-duration">5 min</span>
-    </button>
+    <button class="toc-item" id="toc-3" onclick="goTo(3)"><span class="toc-dot dot-green">1</span>Start on a Positive Note<span class="toc-dur">10 min</span></button>
+    <button class="toc-item" id="toc-4" onclick="goTo(4)"><span class="toc-dot dot-green">2</span>Capture Problems<span class="toc-dur">5 min</span></button>
+    <button class="toc-item" id="toc-5" onclick="goTo(5)"><span class="toc-dot dot-green">3</span>Prioritize Problems<span class="toc-dur">3 min</span></button>
+    <button class="toc-item" id="toc-6" onclick="goTo(6)"><span class="toc-dot dot-green">4</span>Reframe as "How Might We"<span class="toc-dur">3 min</span></button>
+    <button class="toc-item" id="toc-7" onclick="goTo(7)"><span class="toc-dot dot-green">5</span>Ideate Solutions<span class="toc-dur">6 min</span></button>
+    <button class="toc-item" id="toc-8" onclick="goTo(8)"><span class="toc-dot dot-green">6</span>Prioritize Solutions<span class="toc-dur">5 min</span></button>
+    <button class="toc-item" id="toc-9" onclick="goTo(9)"><span class="toc-dot dot-green">7</span>Effort / Impact Scale<span class="toc-dur">10 min</span></button>
+    <button class="toc-item" id="toc-10" onclick="goTo(10)"><span class="toc-dot dot-green">8</span>Make It Actionable<span class="toc-dur">5 min</span></button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SCREENS
-══════════════════════════════════════════ -->
+<!-- ═══════════════════════ SCREENS ═══════════════════════ -->
 <div class="main">
 
-  <!-- ── SCREEN 0: LANDING ── -->
+  <!-- SCREEN 0: LANDING -->
   <div class="screen active" id="screen-0">
-    <div class="landing-hero">
-      <h1>Workshop<br>Facilitator Guide</h1>
-      <p>A step-by-step guide to running the <strong>Affinity Map</strong> and <strong>Lightning Decision Jam</strong> sessions. Follow the steps in order — everything you need is here.</p>
-      <div class="landing-chips">
-        <span class="landing-chip">⏱ ~75 min total</span>
-        <span class="landing-chip">👥 4–10 participants</span>
-        <span class="landing-chip">🖥 Miro / Zoom</span>
-        <span class="landing-chip">📌 Sticky notes</span>
+    <div class="hero">
+      <h1>Workshop Facilitator Guide</h1>
+      <p>Step-by-step guide for running today's session. Open the Miro board before you begin.</p>
+      <div class="chips">
+        <span class="chip">⏱ ~75 min total</span>
+        <span class="chip">👥 4–10 participants</span>
       </div>
     </div>
 
-    <!-- Phase 1 -->
-    <div class="phase-block">
-      <div class="phase-label blue">Phase 1 · ~30 min</div>
+    <div class="miro-banner">
+      <span>🖥 Miro board is ready for this session</span>
+      <a href="https://miro.com/app/board/o9J_kt1PIic=/" target="_blank" rel="noopener" class="miro-link">Open Miro Board ↗</a>
+    </div>
+
+    <div class="phase-card">
+      <span class="phase-tag tag-blue">Phase 1 · 10 min</span>
       <h2>Affinity Map</h2>
-      <p>Participants surface the problems they care about. Similar problems are clustered together to reveal shared interests and emerging themes — making invisible patterns visible to the whole group.</p>
-      <div class="step-list">
-        <button class="step-pill" onclick="goTo(1)">
-          <span class="step-pill-num num-blue">1</span>
-          <span class="step-pill-title">Set the Question</span>
-          <span class="step-pill-time">Setup</span>
-        </button>
-        <button class="step-pill" onclick="goTo(2)">
-          <span class="step-pill-num num-blue">2</span>
-          <span class="step-pill-title">Silent Problem Writing</span>
-          <span class="step-pill-time">10 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(3)">
-          <span class="step-pill-num num-blue">3</span>
-          <span class="step-pill-title">Post & Display</span>
-          <span class="step-pill-time">5 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(4)">
-          <span class="step-pill-num num-blue">4</span>
-          <span class="step-pill-title">Sort & Cluster</span>
-          <span class="step-pill-time">10 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(5)">
-          <span class="step-pill-num num-blue">5</span>
-          <span class="step-pill-title">Name the Categories</span>
-          <span class="step-pill-time">5 min</span>
+      <p>Participants write one problem they want to work on. Similar problems are clustered to reveal shared themes.</p>
+      <div class="step-rows">
+        <button class="step-row" onclick="goTo(1)">
+          <span class="snum snum-blue">AM</span>
+          <span class="stitle">Affinity Map — all steps</span>
+          <span class="sdur">10 min</span>
         </button>
       </div>
     </div>
 
-    <!-- Phase 2 -->
-    <div class="phase-block">
-      <div class="phase-label green">Phase 2 · ~45 min</div>
+    <div class="phase-card">
+      <span class="phase-tag tag-green">Phase 2 · ~45 min</span>
       <h2>Lightning Decision Jam</h2>
-      <p>The group moves from shared understanding to structured action — prioritising one problem, generating solutions, and identifying concrete next steps.</p>
-      <div class="step-list">
-        <button class="step-pill" onclick="goTo(7)">
-          <span class="step-pill-num num-green">1</span>
-          <span class="step-pill-title">Start on a Positive Note</span>
-          <span class="step-pill-time">10 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(8)">
-          <span class="step-pill-num num-green">2</span>
-          <span class="step-pill-title">Capture Problems</span>
-          <span class="step-pill-time">5 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(9)">
-          <span class="step-pill-num num-green">3</span>
-          <span class="step-pill-title">Prioritize Problems</span>
-          <span class="step-pill-time">3 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(10)">
-          <span class="step-pill-num num-green">4</span>
-          <span class="step-pill-title">Reframe as "How Might We"</span>
-          <span class="step-pill-time">3 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(11)">
-          <span class="step-pill-num num-green">5</span>
-          <span class="step-pill-title">Ideate Solutions</span>
-          <span class="step-pill-time">6 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(12)">
-          <span class="step-pill-num num-green">6</span>
-          <span class="step-pill-title">Prioritize Solutions</span>
-          <span class="step-pill-time">5 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(13)">
-          <span class="step-pill-num num-green">7</span>
-          <span class="step-pill-title">Effort / Impact Scale</span>
-          <span class="step-pill-time">10 min</span>
-        </button>
-        <button class="step-pill" onclick="goTo(14)">
-          <span class="step-pill-num num-green">8</span>
-          <span class="step-pill-title">Make It Actionable</span>
-          <span class="step-pill-time">5 min</span>
-        </button>
+      <p>Prioritise one problem, generate solutions, and define concrete next steps.</p>
+      <div class="step-rows">
+        <button class="step-row" onclick="goTo(3)"><span class="snum snum-green">1</span><span class="stitle">Start on a Positive Note</span><span class="sdur">10 min</span></button>
+        <button class="step-row" onclick="goTo(4)"><span class="snum snum-green">2</span><span class="stitle">Capture Problems</span><span class="sdur">5 min</span></button>
+        <button class="step-row" onclick="goTo(5)"><span class="snum snum-green">3</span><span class="stitle">Prioritize Problems</span><span class="sdur">3 min</span></button>
+        <button class="step-row" onclick="goTo(6)"><span class="snum snum-green">4</span><span class="stitle">Reframe as "How Might We"</span><span class="sdur">3 min</span></button>
+        <button class="step-row" onclick="goTo(7)"><span class="snum snum-green">5</span><span class="stitle">Ideate Solutions</span><span class="sdur">6 min</span></button>
+        <button class="step-row" onclick="goTo(8)"><span class="snum snum-green">6</span><span class="stitle">Prioritize Solutions</span><span class="sdur">5 min</span></button>
+        <button class="step-row" onclick="goTo(9)"><span class="snum snum-green">7</span><span class="stitle">Effort / Impact Scale</span><span class="sdur">10 min</span></button>
+        <button class="step-row" onclick="goTo(10)"><span class="snum snum-green">8</span><span class="stitle">Make It Actionable</span><span class="sdur">5 min</span></button>
       </div>
     </div>
 
-    <button class="start-btn" onclick="goTo(1)">Start Facilitation Guide →</button>
+    <button class="start-btn" onclick="goTo(1)">Start Guide →</button>
   </div>
 
-  <!-- ══════════════════════
-       AFFINITY MAP STEPS
-  ══════════════════════ -->
-
-  <!-- ── SCREEN 1: AM — Set the Question ── -->
+  <!-- SCREEN 1: AFFINITY MAP (single page) -->
   <div class="screen" id="screen-1">
-    <div class="step-header">
-      <span class="step-phase-tag tag-affinity">Phase 1 · Affinity Map</span>
-      <div class="step-eyebrow">Step 1 of 5</div>
-      <h1 class="step-title">Set the Question</h1>
-      <div class="step-timer">⚙️ Setup — before participants join</div>
+    <div class="step-top">
+      <span class="step-phase sp-blue">Phase 1 · Affinity Map</span>
+      <h1 class="step-title">Affinity Map</h1>
+      <div class="timer">⏱ 10 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Frame a clear, open-ended question that invites participants to share one specific problem they want to work on — not an idea, not a solution, just a problem.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Surface the problems participants care about and cluster them to reveal shared themes.</p>
     </div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num blue">1</span>
-        <div class="instr-body">
-          <strong>Prepare the canvas</strong>
-          <p>Open your Miro board. Create a large open area with a guiding question written at the top, clearly visible to all participants.</p>
+    <a href="https://miro.com/app/board/o9J_kt1PIic=/" target="_blank" rel="noopener" class="miro-inline">🖥 Open Miro Board ↗</a>
+
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-blue">1</span>
+        <div class="ibody">
+          <strong>Pose the question</strong>
+          <p>Ask participants: <em>"What is one problem related to Agentic AI you'd like to work on today?"</em></p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num blue">2</span>
-        <div class="instr-body">
-          <strong>Write the guiding question</strong>
-          <p>Display this question for participants:<br><br>
-          <em style="font-size:1.05rem; color:var(--ink); font-weight:600;">"What is one problem related to Agentic AI that you would like to work on today?"</em></p>
+      <div class="instr">
+        <span class="inum inum-blue">2</span>
+        <div class="ibody">
+          <strong>Silent writing — 5 min</strong>
+          <p>Everyone writes one problem on a sticky note. Silent, no discussion. One problem only — not a topic or solution.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num blue">3</span>
-        <div class="instr-body">
-          <strong>Add a sticky note example</strong>
-          <p>Place one example sticky note nearby so participants understand the expected format: short, specific, written as a problem — not a solution or general topic.</p>
+      <div class="instr">
+        <span class="inum inum-blue">3</span>
+        <div class="ibody">
+          <strong>Post all at once</strong>
+          <p>Everyone places their sticky note on the Miro board simultaneously.</p>
+        </div>
+      </div>
+      <div class="instr">
+        <span class="inum inum-blue">4</span>
+        <div class="ibody">
+          <strong>Cluster together — 3 min</strong>
+          <p>As a group, drag similar problems together into clusters. Duplicates stay — they show shared concerns.</p>
+        </div>
+      </div>
+      <div class="instr">
+        <span class="inum inum-blue">5</span>
+        <div class="ibody">
+          <strong>Name the clusters — 2 min</strong>
+          <p>Give each cluster a short label. Don't debate names — good enough is fine.</p>
         </div>
       </div>
     </div>
 
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>The Affinity Map technique was created by Jiro Kawakita in the 1960s (also known as the KJ Method). Its effectiveness depends on two things: generating multiple quality inputs, and clean sorting that reveals genuine relationships. Keep the question narrow — <em>one problem</em> per person, not a brainstorm.</p>
+    <div class="fnote">
+      <div class="lbl">📌 Note</div>
+      <p>Point out patterns to the group: <em>"Notice that X and Y came up multiple times — these are shared concerns."</em></p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(0)">← Overview</button>
-      <div class="nav-step-info">
-        <div class="current">Step 1 / 14</div>
-        <div class="total">Affinity Map</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(2)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(0)">← Overview</button>
+      <div class="nav-info"><div class="cur">1 / 10</div><div class="sub">Affinity Map</div></div>
+      <button class="nbtn btn-gold" onclick="goTo(2)">Transition →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 2: AM — Silent Problem Writing ── -->
+  <!-- SCREEN 2: TRANSITION -->
   <div class="screen" id="screen-2">
-    <div class="step-header">
-      <span class="step-phase-tag tag-affinity">Phase 1 · Affinity Map</span>
-      <div class="step-eyebrow">Step 2 of 5</div>
-      <h1 class="step-title">Silent Problem Writing</h1>
-      <div class="step-timer">⏱ 10 minutes</div>
-    </div>
-
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Each participant independently writes down one problem they would like to work on — in silence, without influence from others.</p>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num blue">1</span>
-        <div class="instr-body">
-          <strong>Read the question aloud</strong>
-          <p>Point participants to the guiding question on the board. Make sure everyone can see it.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">2</span>
-        <div class="instr-body">
-          <strong>Instruct participants — silent, individual writing</strong>
-          <p>Ask each participant to take <strong>10 minutes</strong> to write their response on a sticky note. This is done <strong>in silence</strong> — no discussion, no sharing yet. For groups of four or fewer, index cards work well instead of sticky notes.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">3</span>
-        <div class="instr-body">
-          <strong>One problem per person</strong>
-          <p>Remind participants: write <em>one problem</em> only — something specific and real to them. Not a broad topic, not a solution.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Silence is important here. It prevents participants from anchoring on each other's ideas and ensures every voice — not just the most vocal — is represented in the output. Do not rush this step.</p>
-    </div>
-
-    <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(1)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 2 / 14</div>
-        <div class="total">Affinity Map</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(3)">Next →</button>
-    </div>
-  </div>
-
-  <!-- ── SCREEN 3: AM — Post & Display ── -->
-  <div class="screen" id="screen-3">
-    <div class="step-header">
-      <span class="step-phase-tag tag-affinity">Phase 1 · Affinity Map</span>
-      <div class="step-eyebrow">Step 3 of 5</div>
-      <h1 class="step-title">Post & Display</h1>
-      <div class="step-timer">⏱ 5 minutes</div>
-    </div>
-
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Collect all sticky notes and make them visible to the entire group on a shared surface.</p>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num blue">1</span>
-        <div class="instr-body">
-          <strong>Collect all sticky notes simultaneously</strong>
-          <p>Ask participants to post their sticky note(s) on the shared Miro board at the same time. This avoids anyone being put on the spot.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">2</span>
-        <div class="instr-body">
-          <strong>Keep them visible to everyone</strong>
-          <p>Arrange notes loosely on a flat working surface (the Miro canvas) so the whole group can read them. No discussion yet.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">3</span>
-        <div class="instr-body">
-          <strong>Note duplicates — don't remove them</strong>
-          <p>If two participants wrote similar problems, keep both. Duplicates are valuable — they indicate shared concerns and group consensus.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(2)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 3 / 14</div>
-        <div class="total">Affinity Map</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(4)">Next →</button>
-    </div>
-  </div>
-
-  <!-- ── SCREEN 4: AM — Sort & Cluster ── -->
-  <div class="screen" id="screen-4">
-    <div class="step-header">
-      <span class="step-phase-tag tag-affinity">Phase 1 · Affinity Map</span>
-      <div class="step-eyebrow">Step 4 of 5</div>
-      <h1 class="step-title">Sort & Cluster</h1>
-      <div class="step-timer">⏱ 10 minutes</div>
-    </div>
-
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Group similar problems together into natural clusters, making patterns and shared interests visible to the whole group.</p>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num blue">1</span>
-        <div class="instr-body">
-          <strong>Invite participants to start sorting</strong>
-          <p>Based on guidance from the group, begin sorting sticky notes into columns or clusters based on their relationships and similarities.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">2</span>
-        <div class="instr-body">
-          <strong>Encourage physical engagement</strong>
-          <p>Ask participants to actively engage with the Miro board — moving notes, suggesting groupings, and performing preliminary clustering themselves. Don't let the facilitator do all the work.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">3</span>
-        <div class="instr-body">
-          <strong>Create a parking lot</strong>
-          <p>Create a sticky-note "parking lot" area nearby for any notes that don't fit a natural category. These can be revisited later or remain ungrouped.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Don't over-engineer the clusters. Let natural groupings emerge from the content rather than imposing categories in advance. It's fine to have uneven cluster sizes — some themes will simply attract more problems than others.</p>
-    </div>
-
-    <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(3)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 4 / 14</div>
-        <div class="total">Affinity Map</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(5)">Next →</button>
-    </div>
-  </div>
-
-  <!-- ── SCREEN 5: AM — Name the Categories ── -->
-  <div class="screen" id="screen-5">
-    <div class="step-header">
-      <span class="step-phase-tag tag-affinity">Phase 1 · Affinity Map</span>
-      <div class="step-eyebrow">Step 5 of 5</div>
-      <h1 class="step-title">Name the Categories</h1>
-      <div class="step-timer">⏱ 5 minutes</div>
-    </div>
-
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Give each cluster a short, descriptive label that the group agrees on — transforming raw problems into named, shared themes.</p>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num blue">1</span>
-        <div class="instr-body">
-          <strong>Ask the group to suggest category names</strong>
-          <p>Once the content is sorted, ask participants to suggest a name for each cluster. The name should capture what all the problems in that group have in common.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">2</span>
-        <div class="instr-body">
-          <strong>Label each cluster</strong>
-          <p>Place a labelling sticky note (different colour or larger size) at the top of each cluster with the agreed category name.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num blue">3</span>
-        <div class="instr-body">
-          <strong>Don't get stuck on naming</strong>
-          <p>Avoid prolonged naming debates. A good-enough name is better than a perfect name debated for five minutes. Move on once there's rough agreement.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>At the end of this step, briefly show the full map to the group and read out the category names. This is the "aha" moment — participants often notice they share concerns they didn't know others had. This shared awareness is what makes the next phase (LDJ) more focused and productive.</p>
-    </div>
-
-    <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(4)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 5 / 14</div>
-        <div class="total">Affinity Map → Transition</div>
-      </div>
-      <button class="nav-btn btn-next gold" onclick="goTo(6)">Transition →</button>
-    </div>
-  </div>
-
-  <!-- ── SCREEN 6: TRANSITION ── -->
-  <div class="screen" id="screen-6">
-    <div class="transition-screen">
+    <div class="transition-box">
       <div class="icon">🔀</div>
       <h2>From Exploration to Action</h2>
-      <p>The Affinity Map has revealed where the group's thinking is focused. You now have a shared picture of the problem space — clustered, named, and visible to everyone.</p>
-      <div class="transition-divider">now we shift</div>
-      <p>The <strong>Lightning Decision Jam</strong> takes this shared understanding and moves the group toward structured decision-making: one prioritised problem, concrete solutions, and clear actions.</p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
-        <span class="phase-pill blue">Affinity Map · Explore & Sense-Make</span>
-        <span style="color:rgba(255,255,255,.5); align-self:center;">→</span>
-        <span class="phase-pill green">LDJ · Converge & Decide</span>
+      <p>You've mapped where the group's thinking is focused. Now use that shared picture to drive structured decisions.</p>
+      <div class="phase-pills">
+        <span class="ppill ppill-blue">Affinity Map · Explore</span>
+        <span style="color:rgba(255,255,255,.4); align-self:center;">→</span>
+        <span class="ppill ppill-green">LDJ · Decide & Act</span>
       </div>
     </div>
 
-    <div class="facilitator-note" style="margin-top:0;">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Use the Affinity Map clusters as the starting context when you open the LDJ. You don't need to re-explain everything — just remind participants: <em>"We've seen what problems are on people's minds. Now let's work through one of them together using a structured process."</em></p>
+    <div class="fnote">
+      <div class="lbl">📌 Say to the group</div>
+      <p><em>"We've seen what problems are on people's minds. Now let's work through one together using a structured process."</em></p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(5)">← Affinity Map</button>
-      <div class="nav-step-info">
-        <div class="current">Transition</div>
-        <div class="total">Phase 1 → Phase 2</div>
-      </div>
-      <button class="nav-btn btn-next gold" onclick="goTo(7)">Start LDJ →</button>
+      <button class="nbtn btn-prev" onclick="goTo(1)">← Affinity Map</button>
+      <div class="nav-info"><div class="cur">2 / 10</div><div class="sub">Transition</div></div>
+      <button class="nbtn btn-gold" onclick="goTo(3)">Start LDJ →</button>
     </div>
   </div>
 
-  <!-- ══════════════════════
-       LDJ STEPS
-  ══════════════════════ -->
-
-  <!-- ── SCREEN 7: LDJ Step 1 — Start on a Positive Note ── -->
-  <div class="screen" id="screen-7">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 1 of 8</div>
+  <!-- SCREEN 3: LDJ 1 — Positive Note -->
+  <div class="screen" id="screen-3">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 1 of 8</div>
       <h1 class="step-title">Start on a Positive Note</h1>
-      <div class="step-timer">⏱ 10 minutes</div>
+      <div class="timer">⏱ 10 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Begin with what's working well. This sets a constructive tone before moving into problems and challenges.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Open with what's working well before moving into problems.</p>
     </div>
 
-    <div class="materials">
-      <span class="material-tag">🗺 Sailboat canvas</span>
-      <span class="material-tag">📌 Sticky notes</span>
-      <span class="material-tag">🖊 Markers</span>
-    </div>
+    <a href="https://miro.com/app/board/o9J_kt1PIic=/" target="_blank" rel="noopener" class="miro-inline">🖥 Open Miro Board ↗</a>
 
-    <!-- Sailboat diagram -->
-    <div class="diagram">
-      <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" style="max-width:380px;">
-        <!-- Water line -->
-        <path d="M0 130 Q100 120 200 130 Q300 140 400 130" stroke="#60a5fa" stroke-width="2" fill="none"/>
-        <!-- Boat hull -->
-        <ellipse cx="200" cy="170" rx="120" ry="30" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
-        <!-- Sail -->
-        <polygon points="200,30 200,130 80,130" fill="#e8f0ea" stroke="#2d5a3d" stroke-width="1.5"/>
-        <polygon points="200,50 200,130 300,130" fill="#d1fae5" stroke="#2d5a3d" stroke-width="1.5"/>
-        <!-- Mast -->
-        <line x1="200" y1="20" x2="200" y2="135" stroke="#2d5a3d" stroke-width="2"/>
-        <!-- Anchor -->
-        <text x="200" y="180" text-anchor="middle" font-size="18">⚓</text>
-        <!-- Labels -->
-        <text x="120" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#2d5a3d" font-weight="600">STRENGTHS</text>
-        <text x="120" y="94" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#3e7a54">What's working well</text>
-        <text x="200" y="158" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#1e40af" font-weight="600">CHALLENGES</text>
-        <text x="200" y="170" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#1e40af">Anchors holding us back</text>
-      </svg>
-      <div class="diagram-caption">The Sailboat Canvas — top half for strengths, bottom half for challenges.</div>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Prepare the Sailboat Canvas</strong>
-          <p>Create a large square on the Miro board divided by a wavy horizontal line. The top half (with a sail) represents strengths. The bottom half (with an anchor) represents challenges.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Silent writing — 4 min</strong>
+          <p>Participants write what is working well, one item per sticky note.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>Frame the session topic briefly</strong>
-          <p>Remind the group of the workshop focus. Then ask participants to silently write what is working well — one item per sticky note. <strong>4 minutes, in silence.</strong></p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
-          <strong>Each participant shares their positives</strong>
-          <p>Each person reads out their sticky notes (1–2 minutes each) and places them on the <em>top half</em> of the sailboat. No interruptions — only clarifying questions allowed.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Share & post — 6 min</strong>
+          <p>Each person reads their notes aloud and places them on the top half of the sailboat canvas. No interruptions.</p>
         </div>
       </div>
     </div>
 
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>These notes are not carried forward — they serve their purpose after being shared. Do not let this step run over time. Move on once everyone has presented.</p>
+    <div class="fnote">
+      <div class="lbl">📌 Note</div>
+      <p>These notes are not carried forward. Their purpose is to set a constructive tone.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(6)">← Transition</button>
-      <div class="nav-step-info">
-        <div class="current">Step 6 / 14</div>
-        <div class="total">LDJ Step 1</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(8)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(2)">← Transition</button>
+      <div class="nav-info"><div class="cur">3 / 10</div><div class="sub">LDJ Step 1</div></div>
+      <button class="nbtn btn-next" onclick="goTo(4)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 8: LDJ Step 2 — Capture Problems ── -->
-  <div class="screen" id="screen-8">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 2 of 8</div>
+  <!-- SCREEN 4: LDJ 2 — Capture Problems -->
+  <div class="screen" id="screen-4">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 2 of 8</div>
       <h1 class="step-title">Capture Problems</h1>
-      <div class="step-timer">⏱ 5 minutes</div>
+      <div class="timer">⏱ 5 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Give everyone space to write down the problems, frustrations, and concerns on their mind — silently and without judgement.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Get all problems, frustrations, and concerns on the board — silently and without judgement.</p>
     </div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>4 minutes of silent writing</strong>
-          <p>All participants spend 4 minutes silently writing problems, frustrations, mistakes, or concerns on individual sticky notes. Encourage generating as many as possible — quantity matters here.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Silent writing — 4 min</strong>
+          <p>Participants write problems, frustrations, or concerns. One per sticky note. As many as possible.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>Post all at once — no reading aloud</strong>
-          <p>After 4 minutes, everyone posts their sticky notes simultaneously onto the <em>bottom half</em> of the sailboat canvas (1 minute). Notes are <strong>not read aloud</strong>.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Post all at once — 1 min</strong>
+          <p>Everyone places notes on the bottom half of the sailboat simultaneously. No reading aloud.</p>
         </div>
       </div>
-    </div>
-
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Posting simultaneously avoids putting anyone on the spot. Participants don't need to justify or explain their problems at this stage — that pressure kills honesty. Let the sticky notes speak for themselves.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(7)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 7 / 14</div>
-        <div class="total">LDJ Step 2</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(9)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(3)">← Previous</button>
+      <div class="nav-info"><div class="cur">4 / 10</div><div class="sub">LDJ Step 2</div></div>
+      <button class="nbtn btn-next" onclick="goTo(5)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 9: LDJ Step 3 — Prioritize Problems ── -->
-  <div class="screen" id="screen-9">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 3 of 8</div>
+  <!-- SCREEN 5: LDJ 3 — Prioritize Problems -->
+  <div class="screen" id="screen-5">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 3 of 8</div>
       <h1 class="step-title">Prioritize Problems</h1>
-      <div class="step-timer">⏱ 3 minutes</div>
+      <div class="timer">⏱ 3 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Use democratic dot voting to surface the most important problems — without discussion or debate.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Surface the most important problems through silent dot voting — no debate.</p>
     </div>
 
-    <div class="materials">
-      <span class="material-tag">🟣 3 dot stickers per person</span>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Give each participant 3 dot stickers</strong>
-          <p>Each person gets exactly 3 votes (dots). In Miro, use the voting feature or ask participants to place emoji dots on the sticky notes they choose.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Each participant gets 3 votes</strong>
+          <p>Use Miro's voting feature or dot stickers. Vote silently and individually.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>Vote individually — no discussion</strong>
-          <p>Voting happens in silence. Participants can vote on their own sticky notes. They can also place multiple votes on a single item they feel strongly about.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
-          <strong>Arrange by vote count</strong>
-          <p>After voting, the facilitator arranges problems in priority order — most votes at the top. This typically forms a triangle or "Christmas tree" shape.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Arrange by votes</strong>
+          <p>After voting, order problems from most to least votes. The top problem moves forward.</p>
         </div>
       </div>
     </div>
 
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Voting is far better than open conversation for this — it prevents dominant voices from driving the agenda and ensures every participant's view is counted equally. Don't skip it or shortcut it with discussion.</p>
+    <div class="fnote">
+      <div class="lbl">📌 Note</div>
+      <p>Participants can vote on their own notes and stack multiple votes on one item.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(8)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 8 / 14</div>
-        <div class="total">LDJ Step 3</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(10)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(4)">← Previous</button>
+      <div class="nav-info"><div class="cur">5 / 10</div><div class="sub">LDJ Step 3</div></div>
+      <button class="nbtn btn-next" onclick="goTo(6)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 10: LDJ Step 4 — Reframe as HMW ── -->
-  <div class="screen" id="screen-10">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 4 of 8</div>
+  <!-- SCREEN 6: LDJ 4 — HMW -->
+  <div class="screen" id="screen-6">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 4 of 8</div>
       <h1 class="step-title">Reframe as "How Might We"</h1>
-      <div class="step-timer">⏱ 3 minutes</div>
+      <div class="timer">⏱ 3 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Transform the top-voted problem into an open, actionable challenge question using the "How Might We" (HMW) format.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Turn the top-voted problem into an open, actionable challenge question.</p>
     </div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
           <strong>Take the top-voted problem</strong>
-          <p>Select the problem with the most dot votes. This becomes the focus of the rest of the session.</p>
+          <p>Rewrite it as: <em style="font-weight:600;">"How Might We [solve this]?"</em></p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>Reframe it as a HMW question</strong>
-          <p>Write it as: <em style="font-weight:600;">"How Might We [solve the problem]?"</em></p>
-          <p style="margin-top:8px;">The HMW format works because:<br>
-          <strong>HOW</strong> — assumes action is possible<br>
-          <strong>MIGHT</strong> — acknowledges multiple solutions exist<br>
-          <strong>WE</strong> — frames it as a collaborative effort</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
           <strong>Display it prominently</strong>
-          <p>Write the HMW question large and clearly on the board where everyone can see it throughout the rest of the session.</p>
+          <p>Post the HMW question on the Miro board where everyone can see it for the rest of the session.</p>
         </div>
       </div>
     </div>
 
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>You can optionally repeat this step for up to 4–5 top-voted problems if time allows. Lower-voted problems can be placed in a backlog for future sessions. For this workshop, focus on <strong>one HMW</strong> to keep momentum.</p>
+    <div class="fnote">
+      <div class="lbl">📌 Why HMW?</div>
+      <p><strong>How</strong> = action is possible · <strong>Might</strong> = many solutions exist · <strong>We</strong> = collaborative effort.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(9)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 9 / 14</div>
-        <div class="total">LDJ Step 4</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(11)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(5)">← Previous</button>
+      <div class="nav-info"><div class="cur">6 / 10</div><div class="sub">LDJ Step 4</div></div>
+      <button class="nbtn btn-next" onclick="goTo(7)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 11: LDJ Step 5 — Ideate Solutions ── -->
-  <div class="screen" id="screen-11">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 5 of 8</div>
+  <!-- SCREEN 7: LDJ 5 — Ideate -->
+  <div class="screen" id="screen-7">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 5 of 8</div>
       <h1 class="step-title">Ideate Solutions</h1>
-      <div class="step-timer">⏱ 6 minutes</div>
+      <div class="timer">⏱ 6 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Generate as many potential solutions to the HMW question as possible — in silence, prioritising quantity over quality.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Generate as many solutions to the HMW question as possible — quantity over quality.</p>
     </div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Display the HMW question</strong>
-          <p>Make sure the "How Might We" question is clearly visible to everyone on the board.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Silent writing — 5 min</strong>
+          <p>One idea per sticky note. Aim for breadth — no filtering, no discussion.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>5 minutes of silent idea generation</strong>
-          <p>Participants write as many potential solutions as possible — one idea per sticky note. Emphasise: <strong>"Quantity over quality."</strong> Aim for breadth, not refinement.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
-          <strong>Ideas must stand alone</strong>
-          <p>Each sticky note must be understandable when read on its own — without verbal explanation. If it needs explaining, it needs rewriting.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">4</span>
-        <div class="instr-body">
-          <strong>Post all at once — no discussion</strong>
-          <p>After 5 minutes, everyone places their sticky notes on the working area simultaneously (1 minute). No presenting, no explaining.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Post all at once — 1 min</strong>
+          <p>Place notes on the board simultaneously. Each note must be understandable without explanation.</p>
         </div>
       </div>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(10)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 10 / 14</div>
-        <div class="total">LDJ Step 5</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(12)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(6)">← Previous</button>
+      <div class="nav-info"><div class="cur">7 / 10</div><div class="sub">LDJ Step 5</div></div>
+      <button class="nbtn btn-next" onclick="goTo(8)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 12: LDJ Step 6 — Prioritize Solutions ── -->
-  <div class="screen" id="screen-12">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 6 of 8</div>
+  <!-- SCREEN 8: LDJ 6 — Prioritize Solutions -->
+  <div class="screen" id="screen-8">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 6 of 8</div>
       <h1 class="step-title">Prioritize Solutions</h1>
-      <div class="step-timer">⏱ 5 minutes</div>
+      <div class="timer">⏱ 5 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Use a second round of dot voting to identify the solutions the group finds most promising.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Vote to identify the most promising solutions.</p>
     </div>
 
-    <div class="materials">
-      <span class="material-tag">🟢 6 dot stickers per person</span>
-    </div>
-
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Give each participant 6 dot stickers</strong>
-          <p>Each person gets 6 votes for this round — more than the problem-voting round to reflect the larger number of ideas.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Each participant gets 6 votes — 4 min</strong>
+          <p>Vote silently on the solutions that best address the HMW. Distribute votes however you like.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>4 minutes to vote on solutions</strong>
-          <p>Vote on the solutions that best address the HMW question. Vote silently and individually. You can distribute votes however you like.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
-          <strong>Reorganise by vote count</strong>
-          <p>After voting, the facilitator reorganises solutions by number of votes. Solutions with only one vote are typically set aside.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Reorder by vote count</strong>
+          <p>Arrange solutions from most to fewest votes. Solutions with only 1 vote are set aside.</p>
         </div>
       </div>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(11)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 11 / 14</div>
-        <div class="total">LDJ Step 6</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(13)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(7)">← Previous</button>
+      <div class="nav-info"><div class="cur">8 / 10</div><div class="sub">LDJ Step 6</div></div>
+      <button class="nbtn btn-next" onclick="goTo(9)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 13: LDJ Step 7 — Effort/Impact Scale ── -->
-  <div class="screen" id="screen-13">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 7 of 8</div>
+  <!-- SCREEN 9: LDJ 7 — Effort/Impact -->
+  <div class="screen" id="screen-9">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 7 of 8</div>
       <h1 class="step-title">Effort / Impact Scale</h1>
-      <div class="step-timer">⏱ 10 minutes</div>
+      <div class="timer">⏱ 10 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Plot the top-voted solutions on a 2×2 matrix to identify which are high-impact and low-effort — the "sweet spot" to act on immediately.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Plot solutions on a 2×2 grid to find the sweet spot: high impact, low effort.</p>
     </div>
 
-    <!-- Quadrant diagram -->
-    <div style="margin-bottom:24px;">
-      <div style="display:flex; justify-content:space-between; margin-bottom:4px; padding:0 2px;">
-        <span style="font-size:.75rem; color:var(--ink-light);">← Less effort</span>
-        <span style="font-size:.75rem; color:var(--ink-light);">More effort →</span>
-      </div>
-      <div class="quadrant-grid">
-        <div class="quadrant q-tl">
-          <div class="q-label">Top-Left ⭐ Sweet Spot</div>
-          <div class="q-title">High Impact · Low Effort</div>
-          <div class="q-desc">The priority zone. Execute these immediately.</div>
-          <div class="q-action">→ Act now</div>
-        </div>
-        <div class="quadrant q-tr">
-          <div class="q-label">Top-Right</div>
-          <div class="q-title">High Impact · High Effort</div>
-          <div class="q-desc">Worth doing — plan as larger projects.</div>
-          <div class="q-action">→ Plan for later</div>
-        </div>
-        <div class="quadrant q-bl">
-          <div class="q-label">Bottom-Left</div>
-          <div class="q-title">Low Impact · Low Effort</div>
-          <div class="q-desc">Quick wins — optional to pursue.</div>
-          <div class="q-action">→ Optional</div>
-        </div>
-        <div class="quadrant q-br">
-          <div class="q-label">Bottom-Right</div>
-          <div class="q-title">Low Impact · High Effort</div>
-          <div class="q-desc">Avoid. Not worth the effort right now.</div>
-          <div class="q-action">→ Shelve</div>
-        </div>
-      </div>
-      <div style="display:flex; justify-content:space-between; margin-top:4px; padding:0 2px;">
-        <span style="font-size:.75rem; color:var(--ink-light);">↑ High impact</span>
-        <span style="font-size:.75rem; color:var(--ink-light);">Low impact ↓</span>
-      </div>
+    <div class="axis-row"><span>← Low effort</span><span>High effort →</span></div>
+    <div class="quadrant-grid">
+      <div class="quad q-tl"><div class="ql">⭐ Sweet Spot</div><div class="qt">High impact · Low effort</div><div class="qa">→ Act now</div></div>
+      <div class="quad q-tr"><div class="ql">Plan</div><div class="qt">High impact · High effort</div><div class="qa">→ Plan as project</div></div>
+      <div class="quad q-bl"><div class="ql">Optional</div><div class="qt">Low impact · Low effort</div><div class="qa">→ Quick win</div></div>
+      <div class="quad q-br"><div class="ql">Avoid</div><div class="qt">Low impact · High effort</div><div class="qa">→ Shelve</div></div>
     </div>
+    <div class="axis-row"><span>↑ High impact</span><span>Low impact ↓</span></div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Draw the Effort/Impact grid</strong>
-          <p>Create a square on the Miro board with two axes: horizontal = Effort (less → more), vertical = Impact (not at all → completely). Draw lines through the centre creating four quadrants.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
+    <div class="instrs" style="margin-top:16px;">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
           <strong>Place each top-voted solution on the grid</strong>
-          <p>Take the highest-voted solutions one at a time. For each one, ask the group:<br>
-          — <em>"Is the impact higher or lower?"</em> → move it vertically<br>
-          — <em>"Is the effort higher or lower?"</em> → move it horizontally<br>
-          Keep each discussion <strong>under 20 seconds</strong>. Approximations are fine.</p>
+          <p>For each one, ask: <em>"Higher or lower impact? More or less effort?"</em> — keep each discussion under 20 seconds.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
           <strong>Mark the sweet spot</strong>
-          <p>Solutions landing in the <strong>top-left quadrant</strong> (high impact, low effort) are your sweet spot. Mark these with a contrasting coloured dot or star.</p>
+          <p>Solutions in the top-left are your priority. Mark them with a star or coloured dot.</p>
         </div>
       </div>
-    </div>
-
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>Don't let discussions drag on. The 20-second rule is strict by design — fast decisions prevent over-analysis. The exact position on the grid is less important than identifying which quadrant a solution belongs to.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(12)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 12 / 14</div>
-        <div class="total">LDJ Step 7</div>
-      </div>
-      <button class="nav-btn btn-next" onclick="goTo(14)">Next →</button>
+      <button class="nbtn btn-prev" onclick="goTo(8)">← Previous</button>
+      <div class="nav-info"><div class="cur">9 / 10</div><div class="sub">LDJ Step 7</div></div>
+      <button class="nbtn btn-next" onclick="goTo(10)">Next →</button>
     </div>
   </div>
 
-  <!-- ── SCREEN 14: LDJ Step 8 — Make It Actionable ── -->
-  <div class="screen" id="screen-14">
-    <div class="step-header">
-      <span class="step-phase-tag tag-ldj">Phase 2 · Lightning Decision Jam</span>
-      <div class="step-eyebrow">LDJ Step 8 of 8</div>
+  <!-- SCREEN 10: LDJ 8 — Actionable -->
+  <div class="screen" id="screen-10">
+    <div class="step-top">
+      <span class="step-phase sp-green">Phase 2 · Lightning Decision Jam</span>
+      <div class="step-num">LDJ Step 8 of 8</div>
       <h1 class="step-title">Make It Actionable</h1>
-      <div class="step-timer">⏱ 5 minutes</div>
+      <div class="timer">⏱ 5 minutes</div>
     </div>
 
-    <div class="objective-box">
-      <div class="label">Objective</div>
-      <p>Turn sweet-spot solutions into concrete, assigned action steps that can begin immediately — not someday.</p>
+    <div class="objective">
+      <div class="lbl">Objective</div>
+      <p>Turn sweet-spot solutions into assigned, concrete actions that can start immediately.</p>
     </div>
 
-    <div class="instructions">
-      <div class="instr-card">
-        <span class="instr-num green">1</span>
-        <div class="instr-body">
-          <strong>Focus on sweet-spot solutions</strong>
-          <p>Take each solution from the top-left (sweet spot) quadrant. For each, the team develops <strong>three action steps</strong> to test the solution.</p>
+    <div class="instrs">
+      <div class="instr">
+        <span class="inum inum-green">1</span>
+        <div class="ibody">
+          <strong>Define 3 action steps per solution</strong>
+          <p>The first step must be easy and doable right away. All steps completable within 1–2 weeks.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">2</span>
-        <div class="instr-body">
-          <strong>Define the first step — make it frictionless</strong>
-          <p>The first action step should be easy and completable almost immediately. If the first step requires approval, budget, or preparation, it's too big — break it down further.</p>
+      <div class="instr">
+        <span class="inum inum-green">2</span>
+        <div class="ibody">
+          <strong>Assign one owner per solution</strong>
+          <p>One name, not a group. Place action steps next to the solution on the board.</p>
         </div>
       </div>
-      <div class="instr-card">
-        <span class="instr-num green">3</span>
-        <div class="instr-body">
-          <strong>Keep action steps short in scope</strong>
-          <p>All action steps should be completable within <strong>1–2 weeks maximum</strong>. Document each step on rectangular sticky notes placed next to the solution.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">4</span>
-        <div class="instr-body">
-          <strong>Assign a responsible person</strong>
-          <p>Each solution must be assigned to <strong>one team member</strong> who takes ownership. No shared ownership — one name per solution.</p>
-        </div>
-      </div>
-      <div class="instr-card">
-        <span class="instr-num green">5</span>
-        <div class="instr-body">
-          <strong>Capture and share the results</strong>
-          <p>Take a screenshot or export the Miro board. Share with all participants immediately after the session.</p>
+      <div class="instr">
+        <span class="inum inum-green">3</span>
+        <div class="ibody">
+          <strong>Export & share</strong>
+          <p>Screenshot or export the Miro board and share with all participants.</p>
         </div>
       </div>
     </div>
 
-    <div class="facilitator-note">
-      <div class="label">📌 Facilitator Note</div>
-      <p>After the workshop, schedule a short 10-minute check-in with each responsible person after 1–2 weeks to discuss progress, current work, and any blockers. This follow-up is what turns workshop outputs into real change.</p>
-    </div>
-
-    <!-- Completion message -->
-    <div style="background:var(--moss); border-radius:var(--r); padding:28px; margin-top:24px; text-align:center;">
-      <div style="font-size:2rem; margin-bottom:10px;">🎉</div>
-      <h3 style="font-family:var(--serif); color:var(--white); font-size:1.4rem; margin-bottom:8px;">Workshop Complete</h3>
-      <p style="color:rgba(255,255,255,.78); font-size:.95rem; max-width:420px; margin:0 auto;">The group has moved from a shared map of problems to a set of prioritised, actionable next steps. Well done.</p>
+    <div class="complete-box">
+      <div style="font-size:1.8rem;">🎉</div>
+      <h3>Workshop Complete</h3>
+      <p>From shared problems to prioritised, assigned actions. Well done.</p>
     </div>
 
     <div class="step-nav">
-      <button class="nav-btn btn-prev" onclick="goTo(13)">← Previous</button>
-      <div class="nav-step-info">
-        <div class="current">Step 14 / 14</div>
-        <div class="total">LDJ Step 8 · Final</div>
-      </div>
-      <button class="nav-btn btn-next gold" onclick="goTo(0)">← Back to Overview</button>
+      <button class="nbtn btn-prev" onclick="goTo(9)">← Previous</button>
+      <div class="nav-info"><div class="cur">10 / 10</div><div class="sub">LDJ Step 8 · Final</div></div>
+      <button class="nbtn btn-gold" onclick="goTo(0)">← Overview</button>
     </div>
   </div>
 
 </div><!-- /main -->
 
 <script>
-  // ── Total screens (0–14) ──
-  const TOTAL = 15;
+  const TOTAL = 11;
   let current = 0;
 
-  // Read step from URL hash on load
   window.addEventListener('load', () => {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#step-')) {
       const n = parseInt(hash.replace('#step-', ''), 10);
-      if (!isNaN(n) && n >= 0 && n < TOTAL) {
-        showScreen(n, false);
-        return;
-      }
+      if (!isNaN(n) && n >= 0 && n < TOTAL) { showScreen(n, false); return; }
     }
     showScreen(0, false);
   });
@@ -1420,52 +745,28 @@
   function goTo(n) {
     if (n < 0 || n >= TOTAL) return;
     showScreen(n, true);
-    closeTOCPanel();
-  }
-
-  function showScreen(n, scroll) {
-    // Hide current
-    document.getElementById('screen-' + current)?.classList.remove('active');
-    // Show new
-    current = n;
-    const el = document.getElementById('screen-' + n);
-    if (el) el.classList.add('active');
-
-    // Update progress bar
-    document.getElementById('progressFill').style.width = ((n / (TOTAL - 1)) * 100) + '%';
-
-    // Update URL hash
-    history.replaceState(null, '', '#step-' + n);
-
-    // Update TOC active state
-    document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
-    if (n > 0) {
-      document.getElementById('toc-' + n)?.classList.add('active');
-    }
-
-    // Scroll to top
-    if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function toggleTOC() {
-    document.getElementById('tocOverlay').classList.toggle('open');
-  }
-
-  function closeTOCPanel() {
     document.getElementById('tocOverlay').classList.remove('open');
   }
 
-  function closeTOC(e) {
-    if (e.target === document.getElementById('tocOverlay')) closeTOCPanel();
+  function showScreen(n, scroll) {
+    document.getElementById('screen-' + current)?.classList.remove('active');
+    current = n;
+    document.getElementById('screen-' + n)?.classList.add('active');
+    document.getElementById('progressFill').style.width = ((n / (TOTAL - 1)) * 100) + '%';
+    history.replaceState(null, '', '#step-' + n);
+    document.querySelectorAll('.toc-item').forEach(el => el.classList.remove('active'));
+    if (n > 0) document.getElementById('toc-' + n)?.classList.add('active');
+    if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Keyboard navigation
+  function toggleTOC() { document.getElementById('tocOverlay').classList.toggle('open'); }
+  function closeTOC(e) { if (e.target === document.getElementById('tocOverlay')) document.getElementById('tocOverlay').classList.remove('open'); }
+
   document.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current + 1);
     if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(current - 1);
-    if (e.key === 'Escape') closeTOCPanel();
+    if (e.key === 'Escape') document.getElementById('tocOverlay').classList.remove('open');
   });
 </script>
-
 </body>
 </html>
